@@ -9,7 +9,7 @@ from applications.account.forms import LoginForm
 
 # Create your views here.
 
-def login(request):
+def userLogin(request):
 
     data = {
         'form': LoginForm,
@@ -27,7 +27,7 @@ def login(request):
             request.session['id'] = user.id
 
             #return HttpResponseRedirect(reverse('remun_app:panel'))
-            return redirect('account_app:control_panel')
+            return redirect('reinventa_app:panel-control')
         else:
             data['error'] = 'Usuario o contraseña incorrectos.'
             messages.error(request, 'Usuario o contraseña incorrectos.')
@@ -39,7 +39,7 @@ def login(request):
 def logout(request):
     logout(request)
     request.session.flush()
-    response = redirect(reverse('account_base:login_client'))
+    response = redirect(reverse('account_app:login'))
     response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response['Pragma'] = 'no-cache'
     response['Expires'] = '0'
