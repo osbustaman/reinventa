@@ -28,7 +28,8 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    'applications.reinventor'
+    'applications.reinventor',
+    'applications.account'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS

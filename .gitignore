@@ -10,5 +10,13 @@ db.sqlite3
 *.png
 *.xlsx
 
+nbproject
+npm-debug.log
+node_modules
+.sass-cache
+
 local.py
 prod.py
+
+static/*
+applications/account/migrations/0001_initial.py
