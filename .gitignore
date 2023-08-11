@@ -1,0 +1,14 @@
+__pycache__
+env
+**/migrations/!(__init__.py)
+db.sqlite3
+.vscode/launch.json
+.env
+
+*.pyc
+*.jpg
+*.png
+*.xlsx
+
+local.py
+prod.py
