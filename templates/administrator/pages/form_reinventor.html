@@ -1,0 +1,158 @@
+{% extends 'administrator/base.html' %}
+
+{% load static_tags %}
+{% load static %}
+
+{% block title %}{{ action }} Reinventor{% endblock %}
+
+{% block static_up %}
+<!-- bootstrap-daterangepicker -->
+<link href="{% statics_tag 'vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+<!-- bootstrap-datetimepicker -->
+<link href="{% statics_tag 'vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+<!-- Bootstrap Colorpicker -->
+<link href="{% statics_tag 'vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet">
+
+<link href="{% statics_tag 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+
+<link href="{% statics_tag 'vendors/select2/dist/css/select2.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title_page %}{% endblock %}
+
+{% block sub_title_page %}
+{{ action }} Reinventor
+{% endblock %}
+
+{% block menu_action %}
+<ul class="nav navbar-right panel_toolbox">
+    <li>
+        <button type="submit" class="btn btn-info btn-sm" form="form">Guardar <i class="fa fa-floppy-o"></i></button>
+        
+        {% if action == 'Editar' %}
+        <button type="button" class="btn btn-info btn-sm"
+            onclick="redirectToUrl('{% url 'reinventa_app:add-reinventor' %}')">Crear otro Reinventor <i
+                class="fa fa-clipboard"></i></button>
+        {% endif %}
+
+        <button type="button" class="btn btn-info btn-sm"
+                onclick="redirectToUrl('{% url 'reinventa_app:ver-reinventores' %}')">Volver <i
+                    class="fa fa-arrow-left"></i></button>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content_page %}
+
+<form method="post" id="form" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="{{ form.re_nameentity.id_for_label }}">{{ form.re_nameentity.label }}</label>
+                {{ form.re_nameentity }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.re_namereinventor.id_for_label }}">{{ form.re_namereinventor.label }}</label>
+                {{ form.re_namereinventor }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.re_address.id_for_label }}">{{ form.re_address.label }}</label>
+                {{ form.re_address }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="{{ form.pais.id_for_label }}">{{ form.pais.label }}</label>
+                {{ form.pais }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.region.id_for_label }}">{{ form.region.label }}</label>
+                {{ form.region }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.comuna.id_for_label }}">{{ form.comuna.label }}</label>
+                {{ form.comuna }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="{{ form.re_logo.id_for_label }}">{{ form.re_logo.label }}</label>
+                {{ form.re_logo }}
+            </div>
+        </div>
+
+
+    </div>
+</form>
+
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == 'error' %}
+<div class="alert alert-danger mt-4" role="alert">
+{% else %}
+<div class="alert alert-success mt-4" role="alert">
+{% endif %}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="d-flex align-items-center justify-content-start">
+        <i class="icon ion-ios-{% if message.tags == 'error' %}close{% else %}checkmark{% endif %} alert-icon tx-32 mg-t-5 mg-xs-t-0"></i>
+        <span><strong>{% if message.tags == 'error' %}Error{% else %}Éxito{% endif %}: </strong> {{ message }}</span>
+    </div><!-- d-flex -->
+</div><!-- alert -->
+{% endfor %}
+{% endif %}
+
+<script>
+
+    $(document).ready(function() {
+        $('.select2-show-search').select2();
+    });
+    const redirectToUrl = (url) => {
+        location.href = url;
+    }
+
+    const editClient = (url) => {
+        location.href = url;
+    }
+
+    const deleteClient = (url) => {
+        $.confirm({
+            title: 'Confirmación',
+            content: 'Esta eguro de eliminar al cliente?, para eliminar haga clic confirmar, de lo contrario cancelar',
+            buttons: {
+                confirmar: function () {
+                    location.href = url;
+                },
+                cancelar: function () {
+                    $.alert('Operación cancelada');
+                },
+            }
+        });
+    }
+
+    
+</script>
+
+{% endblock %}
+
+{% block static_down %}
+<!-- bootstrap-daterangepicker -->
+<script src="{% statics_tag 'vendors/moment/min/moment.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+<!-- bootstrap-datetimepicker -->    
+<script src="{% statics_tag 'vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+
+<script src="{% statics_tag 'vendors/select2/dist/js/select2.min.js' %}"></script>
+
+{% endblock %}

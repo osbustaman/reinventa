@@ -1,0 +1,102 @@
+{% extends 'administrator/base.html' %}
+
+{% load static_tags %}
+{% load static %}
+
+{% block static_up %}
+<link href="{% statics_tag_maps 'leaflet/leaflet.css' %}" rel="stylesheet">
+<script src="{% statics_tag_maps 'leaflet/leaflet.js' %}"></script>
+<script src="{% statics_tag_maps 'leaflet/leaflet.geometryutil.js' %}"></script>
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block title_page %}{% endblock %}
+
+{% block sub_title_page %}
+
+{% endblock %}
+
+{% block menu_action %}
+
+<div class="row">
+    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-envelope-square"></i>
+            </div>
+            <div class="count">0</div>
+            <p>Solicitudes pendientes.</p>
+        </div>
+    </div>
+
+    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-eye"></i>
+            </div>
+            <div class="count">0</div>
+            <p>Visto por Reinventa.</p>
+        </div>
+    </div>
+
+    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-truck"></i>
+            </div>
+            <div class="count">0</div>
+            <p>Reinventa en ruta.</p>
+        </div>
+    </div>
+
+    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-thumbs-up"></i>
+            </div>
+            <div class="count">0</div>
+            <p>Retirado por Reinventa.</p>
+        </div>
+    </div>
+
+    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+        <div class="tile-stats">
+            <div class="icon">
+                <i class="fa fa-angellist"></i>
+            </div>
+            <div class="count">0</div>
+            <p>Total de Reinventores.</p>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block content_page %}
+<div id="map" style="height: 400px;"></div>
+
+<script>
+    const crate_json = {
+        "startLatitude": {{ request.session.objectCompany.co_latitude }},
+        "startLongitude": {{ request.session.objectCompany.co_longitude }}
+    }
+
+    const accessToken = "pk.eyJ1Ijoib3NidXN0YW1hbiIsImEiOiJjbGpyamw4Y2IwZHNjM2VrY256bjF4a3J3In0.BREjlIuXom4d7eS_riSSNQ";
+    // Inicializar el mapa
+    var map = L.map('map').setView([crate_json['startLatitude'], crate_json['startLongitude']], 11);
+
+    // Agregar el mapa base (utilizando Mapbox)
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
+        maxZoom: 25,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+</script>
+
+{% endblock %}
+
+{% block static_down %}
+
+{% endblock %}

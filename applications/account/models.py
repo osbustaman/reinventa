@@ -82,11 +82,11 @@ class Reinventor(TimeStampedModel):
     re_namereinventor = models.CharField("Nombre completo persona a cargo", max_length=255)
     re_address = models.CharField("Dirección de la empresa", help_text="ej: calle siempre viva 1010", max_length=255)
     pais = models.ForeignKey(Pais, verbose_name="País",
-                             db_column="usu_pais", on_delete=models.PROTECT)
+                             db_column="re_pais_id", on_delete=models.PROTECT)
     region = models.ForeignKey(
-        Region, verbose_name="Región", db_column="usu_region", on_delete=models.PROTECT)
+        Region, verbose_name="Región", db_column="re_region_id", on_delete=models.PROTECT)
     comuna = models.ForeignKey(
-        Comuna, verbose_name="Comuna", db_column="usu_comuna", on_delete=models.PROTECT)
+        Comuna, verbose_name="Comuna", db_column="re_comuna_id", on_delete=models.PROTECT)
     
     re_latitude = models.CharField("Latitud", max_length=255, null=True, blank=True)
     re_longitude = models.CharField("Longitud", max_length=255, null=True, blank=True)
@@ -102,6 +102,11 @@ class Reinventor(TimeStampedModel):
     
     def __str__(self):
         return f"{self.re_id} - {self.re_nameentity}"
+    
+    def __create_address(self):
+        return f"""{ self.re_address }, { self.comuna.com_nombre }, { self.region.re_nombre }, { self.pais.pa_nombre }"""
+
+    re_createaddress = property(__create_address)
 
     def save(self, *args, **kwargs):
         super(Reinventor, self).save(*args, **kwargs)
