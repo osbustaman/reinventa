@@ -35,7 +35,7 @@ class UserForm(forms.ModelForm):
     email = forms.EmailField(label="Email",
                              widget=forms.TextInput(attrs=tags_input_general), required=True)
     password = forms.CharField(label="Contraseña",
-                               widget=forms.PasswordInput(attrs=tags_input_readonly), required=False)
+                               widget=forms.PasswordInput(attrs=tags_input_general), required=False)
 
     def clean_username(self):
         data = self.cleaned_data["username"]

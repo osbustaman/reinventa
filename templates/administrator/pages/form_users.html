@@ -41,7 +41,7 @@
         {% endif %}
 
         <button type="button" class="btn btn-info btn-sm"
-                onclick="redirectToUrl('{% url 'reinventa_app:ver-user' %}')">Volver <i
+                onclick="redirectToUrl('/ver-user/')">Volver <i
                     class="fa fa-arrow-left"></i></button>
     </li>
 </ul>
@@ -106,28 +106,7 @@
 
     const redirectToUrl = (url) => {
         location.href = url;
-    }
-
-    const editClient = (url) => {
-        location.href = url;
-    }
-
-    const deleteClient = (url) => {
-        $.confirm({
-            title: 'Confirmación',
-            content: 'Esta eguro de eliminar al cliente?, para eliminar haga clic confirmar, de lo contrario cancelar',
-            buttons: {
-                confirmar: function () {
-                    location.href = url;
-                },
-                cancelar: function () {
-                    $.alert('Operación cancelada');
-                },
-            }
-        });
-    }
-
-    
+    }    
 </script>
 
 {% endblock %}

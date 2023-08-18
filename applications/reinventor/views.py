@@ -40,7 +40,8 @@ def addUserAdmin(request):
 
             ur = UserReinventor()
             ur.user = frm
-            
+            ur.ur_typeuser = 1
+            ur.save()
 
             messages.success(request, 'Usuario creado exitosamente!.')
             return redirect('reinventa_app:edit-user', id=frm.id)
@@ -66,10 +67,15 @@ def editUserAdmin(request, id):
         form = UserForm(request.POST, instance=object)
         if form.is_valid():
             frm = form.save(commit=False)
-            password = object.username
-            hashed_password = make_password(password)
-            frm.password = hashed_password
-            frm.save()
+
+            if len(request.POST['password']) == 0:
+                password = object.username
+                hashed_password = make_password(password)
+                frm.password = hashed_password
+                frm.save()
+            else:
+                frm.set_password(request.POST['password'])
+                frm.save()
 
             # Agregar mensaje de éxito
             messages.success(request, 'Usuario editado exitosamente.')
@@ -85,7 +91,7 @@ def editUserAdmin(request, id):
         'action': 'editar',
         'id': id,
     }
-    return render(request, 'administrator/pages/form_reinventor.html', data)
+    return render(request, 'administrator/pages/form_users.html', data)
 
 
 @login_required

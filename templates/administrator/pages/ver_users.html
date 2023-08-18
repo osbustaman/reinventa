@@ -38,23 +38,21 @@ Listado de Usuarios
         <tr>
             <th>#</th>
             <th>Usuario</th>
-            <th>Reinventor</th>
-            <th>Fecha y hora de retiro</th>
-            <th>Listros de aceite</th>
-            <th>Estado de la solicitud</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Correo</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         {% for object in objectData %}
         <tr>
-            <td>{{ object.re_id }}</td>
-            <td>{{ object.re_nameentity }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td><button type="button" class="btn btn-info btn-sm" onclick="">Editar</button><button type="button"
+            <td>{{ object.user.id }}</td>
+            <td>{{ object.user.username }}</td>
+            <td>{{ object.user.first_name }}</td>
+            <td>{{ object.user.last_name }}</td>
+            <td>{{ object.user.email }}</td>
+            <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-user' object.user.id %}')">Editar</button><button type="button"
                     class="btn btn-danger btn-sm" onclick="">Eliminar</button></td>
         </tr>
         {% endfor %}
