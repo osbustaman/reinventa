@@ -18,5 +18,8 @@ urlpatterns = [
 
     path('ver-request/', views.viewRequestAdmin, name='ver-request'),
     path('ver-user/', views.viewUserAdmin, name='ver-user'),
+    path('add-user/', views.addUserAdmin, name='add-user'),
+    path('edit-user/<int:id>', views.editUserAdmin, name='edit-user'),
+
 
 ]

@@ -27,7 +27,7 @@ Listado de Usuarios
 {% block menu_action %}
 <ul class="nav navbar-right panel_toolbox">
     <li>
-        <button type="button" class="btn btn-info btn-sm" onclick="">Nuevo Usuario <i class="fa fa-plus-circle"></i></button>
+        <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:add-user' %}')">Nuevo Usuario <i class="fa fa-plus-circle"></i></button>
     </li>
 </ul>
 {% endblock %}

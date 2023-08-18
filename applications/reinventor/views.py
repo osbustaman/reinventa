@@ -5,9 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 
 from django.urls import reverse
+from django.contrib.auth.hashers import make_password
 
 from applications.account.models import Comuna, Pais, Region, Reinventor, UserReinventor, WithdrawalRequestReinventor
-from applications.reinventor.forms import CompanyForm, ReinventorForm
+from applications.reinventor.forms import CompanyForm, ReinventorForm, UserForm
 from applications.reinventor.models import Company
 from reinventa.utils import getLatitudeLongitude
 
@@ -21,6 +22,70 @@ def viewRequestAdmin(request):
         'objectData': objectsWithdrawalRequestReinventor,
     }
     return render(request, 'administrator/pages/ver_request.html', data)
+
+
+@login_required
+def addUserAdmin(request):
+
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        
+        if form.is_valid():
+            # Guardar los datos del formulario UserForm
+            frm = form.save(commit=False)
+            frm.is_staff = True
+            frm.is_superuser = True
+            frm.set_password(request.POST['password'])
+            frm.save()
+
+            ur = UserReinventor()
+            ur.user = frm
+            
+
+            messages.success(request, 'Usuario creado exitosamente!.')
+            return redirect('reinventa_app:edit-user', id=frm.id)
+        
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
+    else:
+        form = UserForm()
+    data = {
+        'action': 'crear',
+        'form': form
+    }
+    return render(request, 'administrator/pages/form_users.html', data)
+
+
+@login_required
+def editUserAdmin(request, id):
+    object = get_object_or_404(User, id=id)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=object)
+        if form.is_valid():
+            frm = form.save(commit=False)
+            password = object.username
+            hashed_password = make_password(password)
+            frm.password = hashed_password
+            frm.save()
+
+            # Agregar mensaje de éxito
+            messages.success(request, 'Usuario editado exitosamente.')
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
+    else:
+        form = UserForm(instance=object)
+
+    data = {
+        'form': form,
+        'action': 'editar',
+        'id': id,
+    }
+    return render(request, 'administrator/pages/form_reinventor.html', data)
 
 
 @login_required

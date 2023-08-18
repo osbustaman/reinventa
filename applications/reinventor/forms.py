@@ -2,7 +2,57 @@ from django import forms
 
 from applications.account.models import Comuna, Pais, Region, Reinventor
 from applications.reinventor.models import Company
+
+from django.contrib.auth.forms import User
+
 from reinventa.utils import validarRut
+
+
+
+class UserForm(forms.ModelForm):
+
+    tags_input_general = {
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }
+
+    tags_input_readonly = {
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'readonly': 'readonly'
+    }
+
+    tags_input_select = {
+        'class': 'form-control',
+    }
+
+    username = forms.CharField(label="Usuario",
+                               widget=forms.TextInput(attrs=tags_input_general), help_text="debe ser el rut", required=True)
+    first_name = forms.CharField(label="Nombres",
+                                 widget=forms.TextInput(attrs=tags_input_general), required=True)
+    last_name = forms.CharField(label="Apellidos",
+                                widget=forms.TextInput(attrs=tags_input_general), required=True)
+    email = forms.EmailField(label="Email",
+                             widget=forms.TextInput(attrs=tags_input_general), required=True)
+    password = forms.CharField(label="Contraseña",
+                               widget=forms.PasswordInput(attrs=tags_input_readonly), required=False)
+
+    def clean_username(self):
+        data = self.cleaned_data["username"]
+
+        if not validarRut(data):
+            self.add_error('username', "El rut no es valido")
+        return data
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+        ]
 
 
 class CompanyForm(forms.ModelForm):

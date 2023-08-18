@@ -132,7 +132,7 @@ class UserReinventor(TimeStampedModel):
     user = models.ForeignKey(User, verbose_name="User",
                              db_column="ur_user_id", on_delete=models.PROTECT)
     reinventor = models.ForeignKey(Reinventor, verbose_name="Reinventor",
-                             db_column="ur_reinventor_id", on_delete=models.PROTECT)
+                             db_column="ur_reinventor_id", on_delete=models.PROTECT, null=True, blank=True)
     ur_typeuser = models.IntegerField(
         "Tipo de usuario", choices=TYPE_USER, default=0)
     ur_active = models.CharField(
