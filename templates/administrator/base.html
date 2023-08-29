@@ -71,17 +71,16 @@
                                         <li><a href="{% url 'reinventa_app:panel-control' %}">Dashboard</a></li>
                                     </ul>
                                 </li>
-                                <li id="reinventa" {% if request.session.item == 'clientes' %}class="active"{% else %}{% endif %}><a><i class="fa fa-cube"></i> Reinventa <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu" {% if request.session.item == 'clientes' %}style="display: block;"{% endif %}> 
-                                        <li {% if request.session.sub_item == 'cliente' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:configuracion' %}">Configuración</a></li>
-                                        <li {% if request.session.sub_item == 'report' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-request' %}">Solicitudes</a></li>
-                                        <li {% if request.session.sub_item == 'user_company' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-user' %}">Usuarios</a></li>
+                                <li id="reinventa" {% if request.session.item == 'reinventa' %}class="active"{% else %}{% endif %}><a><i class="fa fa-cube"></i> Reinventa <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" {% if request.session.item == 'reinventa' %}style="display: block;"{% endif %}> 
+                                        <li {% if request.session.sub_item == 'configuracion' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:configuracion' %}">Configuración</a></li>
+                                        <li {% if request.session.sub_item == 'solicitudes' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-request' %}">Solicitudes</a></li>
+                                        <li {% if request.session.sub_item == 'usuarios' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-user' %}">Usuarios</a></li>
                                     </ul>
                                 </li>
-                                <li id="clientes" {% if request.session.item == 'clientes' %}class="active"{% else %}{% endif %}><a><i class="fa fa-building"></i> Reinventores <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu" {% if request.session.item == 'clientes' %}style="display: block;"{% endif %}> 
-                                        <li {% if request.session.sub_item == 'cliente' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-reinventores' %}">Ver Reinventores</a></li>
-                                        <li {% if request.session.sub_item == 'report' %}class="current-page"{% endif %}><a href="#">Reporte</a></li>
+                                <li id="clientes" {% if request.session.item == 'reinventores' %}class="active"{% else %}{% endif %}><a><i class="fa fa-building"></i> Reinventores <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" {% if request.session.item == 'reinventores' %}style="display: block;"{% endif %}> 
+                                        <li {% if request.session.sub_item == 'ver_reinventores' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-reinventores' %}">Ver Reinventores</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -126,7 +125,7 @@
                                     aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/page/" target="_blank"> Ver página oficial</a>
                                     <a class="dropdown-item" href="/admin/" target="_blank"> Ir a Admin Django</a>
-                                    <a class="dropdown-item" href="{% url 'account_app:cerrar-sesion' %}"><i
+                                    <a class="dropdown-item" href="{% url 'logout' %}"><i
                                             class="fa fa-sign-out pull-right"></i>
                                         Cerrar Sesión</a>
                                 </div>

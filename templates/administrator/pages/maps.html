@@ -7,6 +7,7 @@
 <link href="{% statics_tag_maps 'leaflet/leaflet.css' %}" rel="stylesheet">
 <script src="{% statics_tag_maps 'leaflet/leaflet.js' %}"></script>
 <script src="{% statics_tag_maps 'leaflet/leaflet.geometryutil.js' %}"></script>
+
 {% endblock %}
 
 {% block title %}Dashboard{% endblock %}
@@ -65,7 +66,7 @@
             <div class="icon">
                 <i class="fa fa-angellist"></i>
             </div>
-            <div class="count">0</div>
+            <div class="count">{{ cantReinventors }}</div>
             <p>Total de Reinventores.</p>
         </div>
     </div>
@@ -82,6 +83,12 @@
         "startLongitude": {{ request.session.objectCompany.co_longitude }}
     }
 
+    const locations = [
+        {% for reinventor in lstReinventrs %}
+            { latitude: {{ reinventor.re_latitude }}, longitude: {{ reinventor.re_longitude }}, name: '{{ reinventor.re_nameentity }}' },
+        {% endfor %}
+    ];
+
     const accessToken = "pk.eyJ1Ijoib3NidXN0YW1hbiIsImEiOiJjbGpyamw4Y2IwZHNjM2VrY256bjF4a3J3In0.BREjlIuXom4d7eS_riSSNQ";
     // Inicializar el mapa
     var map = L.map('map').setView([crate_json['startLatitude'], crate_json['startLongitude']], 11);
@@ -93,6 +100,13 @@
         tileSize: 512,
         zoomOffset: -1
     }).addTo(map);
+
+    // Agregar marcadores para las ubicaciones
+    locations.forEach(location => {
+        L.marker([location.latitude, location.longitude]).addTo(map)
+            .bindPopup(location.name)
+            .openPopup();
+    });
 </script>
 
 {% endblock %}

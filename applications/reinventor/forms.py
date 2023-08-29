@@ -135,9 +135,11 @@ class ReinventorForm(forms.ModelForm):
                                     queryset=Region.objects.all(), widget=forms.Select(attrs=tags_input_select2 ))
     comuna = forms.ModelChoiceField(label="Comuna", required=True,
                                     queryset=Comuna.objects.all(), widget=forms.Select(attrs=tags_input_select2 ))
-    re_logo  = forms.ImageField(label="Logo Empresa", widget=forms.FileInput(
-        attrs=tags_input_file), help_text=" Formatos .jpg|.png|.gif|.jpeg", required=False)
     
+    re_latitude = forms.CharField(label="Latitude", widget=forms.TextInput(
+        attrs=tags_input_general), required=False)
+    re_longitude = forms.CharField(label="Longitude", widget=forms.TextInput(
+        attrs=tags_input_general), required=False)
 
     class Meta:
         model = Reinventor
@@ -148,5 +150,22 @@ class ReinventorForm(forms.ModelForm):
             'pais',
             'region',
             'comuna',
+            're_latitude',
+            're_longitude'
+        ]
+
+
+class ReinventorLogoForm(forms.ModelForm):
+
+    tags_input_file = {
+        'class': 'form-control-file'
+    }
+
+    re_logo  = forms.ImageField(label="Logo Empresa", widget=forms.FileInput(
+        attrs=tags_input_file), help_text=" Formatos .jpg|.png|.gif|.jpeg", required=True)
+    
+    class Meta:
+        model = Reinventor
+        fields = [
             're_logo'
         ]

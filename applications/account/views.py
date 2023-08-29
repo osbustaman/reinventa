@@ -49,10 +49,5 @@ def userLogin(request):
     
 def logout(request):
     logout(request)
-    request.session.flush()
-    response = redirect('account_app:login')
-    response['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response['Pragma'] = 'no-cache'
-    response['Expires'] = '0'
-    return response
+    redirect('account_app:login')
 
