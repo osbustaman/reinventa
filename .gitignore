@@ -39,10 +39,9 @@ env
 *.ods
 *.odp
 
-static/amanda
 static/gentella
+static/maps
 
-**/amanda/*.html
 **/gentella/*.html
 
 **/settings/*
