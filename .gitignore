@@ -8,6 +8,8 @@ env
 *.pyc
 *.json
 *.pdf
+*.png
+*.jpg
 *.xlsx
 *.xlsb
 *.xls
@@ -41,7 +43,8 @@ static/gentella
 static/maps
 
 **/gentella/*.html
-!**/maps/leaflet/images/*.png
+!**/maps/*
+!**/maps/*
 
 **/settings/*
 !**/settings/base.py
