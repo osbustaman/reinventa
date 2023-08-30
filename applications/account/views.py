@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
 
 from applications.account.forms import LoginForm
 from applications.account.models import UserReinventor
@@ -27,33 +26,54 @@ def userLogin(request):
             request.session['last_name'] = user.last_name
             request.session['id'] = user.id
 
-            objectUserReinventor = UserReinventor.objects.get(user=user)
             logo = ""
-            if objectUserReinventor.ur_typeuser == 1:
+            try:
+                objectUserReinventor = UserReinventor.objects.get(user=user)
+                if objectUserReinventor.ur_typeuser == 1:
+                    objectCompany = (Company.objects.all()).first()
 
+                    if objectCompany:
+                        logo = objectCompany.co_logo.url if objectCompany.co_logo else ""
+
+                        request.session['objectCompany'] = {
+                            "co_name": objectCompany.co_name,
+                            "co_address": objectCompany.co_address,
+                            "co_latitude": objectCompany.co_latitude,
+                            "co_longitude": objectCompany.co_longitude,
+                            "logo": logo,
+                            "ur_typeuser": objectUserReinventor.ur_typeuser,
+                        }
+                    return redirect('reinventa_app:panel-control')
+                else:
+                    logo = objectUserReinventor.reinventor.re_logo.url if objectUserReinventor.reinventor.re_logo else ""
+                    
+                    request.session['objectCompany'] = {
+                            "co_name": objectUserReinventor.reinventor.re_nameentity,
+                            "co_address": objectUserReinventor.reinventor.re_address,
+                            "co_latitude": objectUserReinventor.reinventor.re_latitude,
+                            "co_longitude": objectUserReinventor.reinventor.re_longitude,
+                            "logo": logo,
+                            "ur_typeuser": objectUserReinventor.ur_typeuser,
+                            "re_id": objectUserReinventor.reinventor.re_id,
+                        }
+                    return redirect('reinventa_app:list-request-reinventor')
+            
+            except:
                 objectCompany = (Company.objects.all()).first()
+                if objectCompany.co_logo:
+                    logo = objectCompany.co_logo
+
                 if objectCompany:
                     request.session['objectCompany'] = {
                         "co_name": objectCompany.co_name,
                         "co_address": objectCompany.co_address,
                         "co_latitude": objectCompany.co_latitude,
                         "co_longitude": objectCompany.co_longitude,
-                        #"logo": objectCompany.co_logo,
-                        "ur_typeuser": objectUserReinventor.ur_typeuser,
+                        "logo": logo,
+                        "ur_typeuser": 1,
+                        "admin": True
                     }
                 return redirect('reinventa_app:panel-control')
-            else:
-                if objectUserReinventor.reinventor.re_logo:
-                    logo = objectUserReinventor.reinventor.re_logo
-                request.session['objectCompany'] = {
-                        "co_name": objectUserReinventor.reinventor.re_nameentity,
-                        "co_address": objectUserReinventor.reinventor.re_address,
-                        "co_latitude": objectUserReinventor.reinventor.re_latitude,
-                        "co_longitude": objectUserReinventor.reinventor.re_longitude,
-                        "logo": logo,
-                        "ur_typeuser": objectUserReinventor.ur_typeuser,
-                    }
-                return redirect('reinventa_app:list-request-reinventor')
 
             
         else:
@@ -64,7 +84,7 @@ def userLogin(request):
     else:
         return render(request, 'administrator/login.html', data)
     
-def logout(request):
+def logout_view(request):
     logout(request)
-    redirect('account_app:login')
+    return redirect('account_app:login')
 

@@ -88,8 +88,8 @@
                             {% else %}
                             <ul class="nav side-menu">
                                 <li id="clientes" {% if request.session.item == 'reinventores' %}class="active"{% else %}{% endif %}><a><i class="fa fa-building"></i> Reinventores <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu" {% if request.session.item == 'reinventa' %}style="display: block;"{% endif %}> 
-                                        <li {% if request.session.sub_item == 'solicitudes' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-request' %}">Solicitudes</a></li>
+                                    <ul class="nav child_menu" {% if request.session.item == 'reinventores' %}style="display: block;"{% endif %}> 
+                                        <li {% if request.session.sub_item == 'list_request_reinventor' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:list-request-reinventor' %}">Solicitudes</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -134,7 +134,9 @@
                                 <div class="dropdown-menu dropdown-usermenu pull-right"
                                     aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/page/" target="_blank"> Ver página oficial</a>
+                                    {% if request.session.objectCompany.admin %}
                                     <a class="dropdown-item" href="/admin/" target="_blank"> Ir a Admin Django</a>
+                                    {% endif %}
                                     <a class="dropdown-item" href="{% url 'logout' %}"><i
                                             class="fa fa-sign-out pull-right"></i>
                                         Cerrar Sesión</a>

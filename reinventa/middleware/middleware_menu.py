@@ -53,6 +53,10 @@ class menu_middleware_items(object):
             if '/edit-user-reinventor/' in request.path:
                 request.session['item'] = 'reinventores'
                 request.session['sub_item'] = 'ver_reinventores'
+
+            if '/list-request-reinventor/' in request.path:
+                request.session['item'] = 'reinventores'
+                request.session['sub_item'] = 'list_request_reinventor'
             
         except:
             pass

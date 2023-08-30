@@ -25,7 +25,11 @@ Listado de Solicitudes
 {% endblock %}
 
 {% block menu_action %}
-
+<ul class="nav navbar-right panel_toolbox">
+    <li>
+        <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:crear-request-reinventor' %}')">Nueva solicitud <i class="fa fa-plus-circle"></i></button>
+    </li>
+</ul>
 {% endblock %}
 
 {% block content_page %}

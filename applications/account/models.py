@@ -70,7 +70,7 @@ class Comuna(TimeStampedModel):
         db_table = 'conf_comuna'
         ordering = ['com_id']
 
-class Reinventor(TimeStampedModel):
+class Reinventor(TimeStampedModel): 
 
     OPTIONS = (
         ('Y', 'SI'),
@@ -171,8 +171,7 @@ class WithdrawalRequestReinventor(TimeStampedModel):
                              db_column="ur_user_id", on_delete=models.PROTECT)
     reinventor = models.ForeignKey(Reinventor, verbose_name="Reinventor",
                              db_column="ur_reinventor_id", on_delete=models.PROTECT)
-    wrr_dateout = models.DateField("Fecha de retiro", null=True, blank=True)
-    wrr_hourout = models.CharField("Hora del retiro", null=True, blank=True, max_length=10)
+    wrr_date = models.CharField("Fecha de retiro", null=True, blank=True, max_length=30)
     wrr_quantityliters = models.FloatField("Litros de aceite", null=True, blank=True)
     wrr_estaterequest = models.IntegerField(
         "Estado de la solicitud", choices=ESTATE_REQUEST, default=1)
@@ -191,3 +190,29 @@ class WithdrawalRequestReinventor(TimeStampedModel):
     class Meta:
         db_table = "re_withdrawal_request_reinventor"
         ordering = ['wrr_id']
+
+
+class RequestTracking(TimeStampedModel):
+
+    rt_id = models.AutoField("Key", primary_key=True)
+    user = models.ForeignKey(User, verbose_name="User",
+                             db_column="rt_user_id", on_delete=models.PROTECT)
+    withdrawalRequestReinventor = models.ForeignKey(WithdrawalRequestReinventor, verbose_name="WithdrawalRequestReinventor",
+                             db_column="rt_withdrawal_request_reinventor", on_delete=models.PROTECT)
+    
+    rt_estaterequest = models.CharField("Estado de la solicitud", max_length=50, blank=True, null=True)
+    
+    rt_observation = models.TextField("Latitud", null=True, blank=True)
+
+    def __int__(self):
+        return self.rt_id
+    
+    def __str__(self):
+        return f"{ self.rt_id } - { self.user.username } - { self.rt_estaterequest }"
+
+    def save(self, *args, **kwargs):
+        super(RequestTracking, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = "re_request_tracking"
+        ordering = ['rt_id']

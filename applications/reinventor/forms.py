@@ -113,24 +113,21 @@ class WithdrawalRequestReinventorForm(forms.ModelForm):
         'autocomplete': 'off'
     }
 
-    tags_input_file = {
-        'class': 'form-control-file'
+    tags_input_date = {
+        "class": "form-control",
     }
 
-    tags_input_select = {
-        'class': 'form-control',
-    }
-
-    tags_input_select2 = {
-        'class': 'form-control select2-show-search',
-    }
-
+    wrr_date = forms.DateField(input_formats=["%d-%m-%Y"], label="El retiro lo solicito para el día:",
+                                    widget=forms.DateInput(format="%d-%m-%Y",
+                                                           attrs=tags_input_date), required=True)
+    wrr_quantityliters = forms.FloatField(label="Litros para retirar", widget=forms.TextInput(
+        attrs=tags_input_general), required=True)
     
-
     class Meta:
         model = WithdrawalRequestReinventor
         fields = [
- 
+            'wrr_date',
+            'wrr_quantityliters'
         ]
 
 

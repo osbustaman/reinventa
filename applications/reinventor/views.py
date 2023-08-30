@@ -7,8 +7,8 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.hashers import make_password
 
-from applications.account.models import Comuna, Pais, Region, Reinventor, UserReinventor, WithdrawalRequestReinventor
-from applications.reinventor.forms import CompanyForm, ReinventorForm, ReinventorLogoForm, UserForm
+from applications.account.models import Comuna, Pais, Region, Reinventor, RequestTracking, UserReinventor, WithdrawalRequestReinventor
+from applications.reinventor.forms import CompanyForm, ReinventorForm, ReinventorLogoForm, UserForm, WithdrawalRequestReinventorForm
 from applications.reinventor.models import Company
 from reinventa.utils import getLatitudeLongitude
 
@@ -323,8 +323,6 @@ def addReinventor(request):
     }
     return render(request, 'administrator/pages/form_reinventor.html', data)
 
-
-
 @login_required
 def editReinventor(request, re_id):
     object = get_object_or_404(Reinventor, re_id=re_id)
@@ -415,3 +413,42 @@ def listRequestReinventor(request):
 
     }
     return render(request, 'reinventor/pages/list_request_reinventor.html', data)
+
+
+@login_required
+def addRequestReinventor(request):
+
+
+    if request.method == 'POST':
+        form = WithdrawalRequestReinventorForm(request.POST)
+        
+        if form.is_valid():
+            # Guardar los datos del formulario UserForm
+            frm = form.save(commit=False)
+            frm.user = User.objects.get(id = request.session['id'])
+            frm.reinventor = Reinventor.objects.get(re_id=request.session['objectCompany']['re_id'])
+            frm.wrr_estaterequest = 1
+            frm.save()
+
+            rt = RequestTracking()
+            rt.user = frm.user
+            rt.withdrawalRequestReinventor = frm
+            rt.rt_estaterequest = f"{ frm.wrr_estaterequest }"
+            rt.rt_observation = "se envia correo de solicitud"
+            rt.save()
+
+            messages.success(request, 'Reinventor creado exitosamente!.')
+            return redirect('reinventa_app:edit-reinventor', re_id=frm.re_id)
+        
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
+    else:
+        form = WithdrawalRequestReinventorForm()
+    
+    data = {
+        'action': 'Crear',
+        #'form': form
+    }
+    return render(request, 'reinventor/pages/request.html', data)

@@ -26,7 +26,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from applications.account.api.api import Login, Logout
-from applications.account.views import logout
+from applications.account.views import logout, logout_view
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -49,7 +49,7 @@ urlpatterns = [
 
     path('login/', Login.as_view(), name='login'),
     #path('logout/', Logout.as_view(), name='logout'),
-    path('logout/', logout, name='logout'),
+    path('logout/', logout_view, name='logout'),
 
     path('', include('applications.account.urls')),
     path('', include('applications.reinventor.urls')),
