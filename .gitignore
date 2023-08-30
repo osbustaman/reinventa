@@ -6,8 +6,6 @@ db.sqlite3
 __pycache__
 env
 *.pyc
-*.jpg
-*.png
 *.json
 *.pdf
 *.xlsx
@@ -43,6 +41,7 @@ static/gentella
 static/maps
 
 **/gentella/*.html
+!**/maps/leaflet/images/*.png
 
 **/settings/*
 !**/settings/base.py
