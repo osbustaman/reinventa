@@ -121,7 +121,8 @@ def configurationCompany(request):
     data = {
         'form': form,
         'acction': acction,
-        'co_id': co_id
+        'co_id': co_id,
+        'logo': objCompany.co_logo
     }
     return render(request, 'administrator/pages/form_company.html', data)
 
@@ -164,7 +165,7 @@ def editConfiguration(request, co_id):
     object = get_object_or_404(Company, co_id=co_id)
 
     if request.method == 'POST':
-        form = CompanyForm(request.POST, instance=object)
+        form = CompanyForm(request.POST, request.FILES, instance=object)
         if form.is_valid():
             # Guardar los datos del formulario UserForm
             frm = form.save(commit=False)
@@ -404,3 +405,13 @@ def deleteReinventor(request, re_id):
     object.re_active = 'N'
     object.save()
     return redirect('reinventa_app:ver-reinventores')
+
+
+
+@login_required
+def listRequestReinventor(request):
+
+    data = {
+
+    }
+    return render(request, 'reinventor/pages/list_request_reinventor.html', data)

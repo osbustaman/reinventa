@@ -31,4 +31,7 @@ urlpatterns = [
     path('delete-user-reinventor/<int:re_id>/<int:id>', views.deleteUserReinventor, name='delete-user-reinventor'),
 
 
+    path('list-request-reinventor/', views.listRequestReinventor, name='list-request-reinventor'),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

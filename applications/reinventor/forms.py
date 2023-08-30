@@ -1,6 +1,6 @@
 from django import forms
 
-from applications.account.models import Comuna, Pais, Region, Reinventor
+from applications.account.models import Comuna, Pais, Region, Reinventor, WithdrawalRequestReinventor
 from applications.reinventor.models import Company
 
 from django.contrib.auth.forms import User
@@ -84,6 +84,11 @@ class CompanyForm(forms.ModelForm):
                                     queryset=Region.objects.all(), widget=forms.Select(attrs=tags_input_select2 ))
     comuna = forms.ModelChoiceField(label="Comuna", required=True,
                                     queryset=Comuna.objects.all(), widget=forms.Select(attrs=tags_input_select2 ))
+    co_latitude = forms.CharField(label="Latitude", widget=forms.TextInput(
+        attrs=tags_input_general), required=False)
+    co_longitude = forms.CharField(label="Longitude", widget=forms.TextInput(
+        attrs=tags_input_general), required=False)
+    
     co_logo  = forms.ImageField(label="Logo Empresa", widget=forms.FileInput(
         attrs=tags_input_file), help_text=" Formatos .jpg|.png|.gif|.jpeg", required=False)
 
@@ -95,8 +100,39 @@ class CompanyForm(forms.ModelForm):
             'pais',
             'region',
             'comuna',
-            'co_logo'
+            'co_logo',
+            'co_latitude',
+            'co_longitude'
         ]
+
+
+class WithdrawalRequestReinventorForm(forms.ModelForm):
+
+    tags_input_general = {
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }
+
+    tags_input_file = {
+        'class': 'form-control-file'
+    }
+
+    tags_input_select = {
+        'class': 'form-control',
+    }
+
+    tags_input_select2 = {
+        'class': 'form-control select2-show-search',
+    }
+
+    
+
+    class Meta:
+        model = WithdrawalRequestReinventor
+        fields = [
+ 
+        ]
+
 
 
 class ReinventorForm(forms.ModelForm):

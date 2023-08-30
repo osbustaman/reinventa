@@ -3,12 +3,10 @@ from django.contrib import messages
 
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
-from django.urls import reverse
 
 from applications.account.forms import LoginForm
+from applications.account.models import UserReinventor
 from applications.reinventor.models import Company
-
-from django.forms import model_to_dict
 
 # Create your views here.
 
@@ -29,16 +27,35 @@ def userLogin(request):
             request.session['last_name'] = user.last_name
             request.session['id'] = user.id
 
-            objectCompany = (Company.objects.all()).first()
-            if objectCompany:
-                request.session['objectCompany'] = {
-                    "co_name": objectCompany.co_name,
-                    "co_address": objectCompany.co_address,
-                    "co_latitude": objectCompany.co_latitude,
-                    "co_longitude": objectCompany.co_longitude,
-                }
+            objectUserReinventor = UserReinventor.objects.get(user=user)
+            logo = ""
+            if objectUserReinventor.ur_typeuser == 1:
 
-            return redirect('reinventa_app:panel-control')
+                objectCompany = (Company.objects.all()).first()
+                if objectCompany:
+                    request.session['objectCompany'] = {
+                        "co_name": objectCompany.co_name,
+                        "co_address": objectCompany.co_address,
+                        "co_latitude": objectCompany.co_latitude,
+                        "co_longitude": objectCompany.co_longitude,
+                        #"logo": objectCompany.co_logo,
+                        "ur_typeuser": objectUserReinventor.ur_typeuser,
+                    }
+                return redirect('reinventa_app:panel-control')
+            else:
+                if objectUserReinventor.reinventor.re_logo:
+                    logo = objectUserReinventor.reinventor.re_logo
+                request.session['objectCompany'] = {
+                        "co_name": objectUserReinventor.reinventor.re_nameentity,
+                        "co_address": objectUserReinventor.reinventor.re_address,
+                        "co_latitude": objectUserReinventor.reinventor.re_latitude,
+                        "co_longitude": objectUserReinventor.reinventor.re_longitude,
+                        "logo": logo,
+                        "ur_typeuser": objectUserReinventor.ur_typeuser,
+                    }
+                return redirect('reinventa_app:list-request-reinventor')
+
+            
         else:
             data['error'] = 'Usuario o contraseña incorrectos.'
             messages.error(request, 'Usuario o contraseña incorrectos.')

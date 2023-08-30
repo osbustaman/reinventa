@@ -75,8 +75,27 @@
 
     <div class="form-row">
         <div class="form-group col-4">
+            <label for="{{ form.co_latitude.id_for_label }}">{{ form.co_latitude.label }}</label>
+            {{ form.co_latitude }}
+        </div>
+        <div class="form-group col-4">
+            <label for="{{ form.co_longitude.id_for_label }}">{{ form.co_longitude.label }}</label>
+            {{ form.co_longitude }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-4">
             <label for="{{ form.co_logo.id_for_label }}">{{ form.co_logo.label }}</label>
             {{ form.co_logo }}
+        </div>
+
+        
+    </div>
+
+    <div class="form-row pt-4">
+        <div class="form-group col-12">
+            <img src="media/{{ logo }}" class="rounded float-left img-thumbnail" style="width: 200px;">
         </div>
     </div>
 

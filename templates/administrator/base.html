@@ -65,6 +65,7 @@
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
                         <div class="menu_section">
                             <h3>General</h3>
+                            {% if request.session.objectCompany.ur_typeuser == 1 %}
                             <ul class="nav side-menu">
                                 <li><a><i class="fa fa-home"></i> Inicio <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
@@ -84,6 +85,15 @@
                                     </ul>
                                 </li>
                             </ul>
+                            {% else %}
+                            <ul class="nav side-menu">
+                                <li id="clientes" {% if request.session.item == 'reinventores' %}class="active"{% else %}{% endif %}><a><i class="fa fa-building"></i> Reinventores <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu" {% if request.session.item == 'reinventa' %}style="display: block;"{% endif %}> 
+                                        <li {% if request.session.sub_item == 'solicitudes' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:ver-request' %}">Solicitudes</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            {% endif %}
                         </div>
                     </div>
                     <!-- /sidebar menu -->
