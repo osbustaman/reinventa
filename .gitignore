@@ -43,8 +43,7 @@ static/gentella
 static/maps
 
 **/gentella/*.html
-!**/maps/*
-!**/maps/*
+!**/maps
 
 **/settings/*
 !**/settings/base.py
