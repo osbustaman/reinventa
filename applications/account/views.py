@@ -60,21 +60,27 @@ def userLogin(request):
             
             except:
                 objectCompany = (Company.objects.all()).first()
-                if objectCompany.co_logo:
-                    logo = objectCompany.co_logo
 
+                logo = ""
+                address = ""
+                latitude = ""
+                longitude = ""
                 if objectCompany:
-                    request.session['objectCompany'] = {
-                        "co_name": objectCompany.co_name,
-                        "co_address": objectCompany.co_address,
-                        "co_latitude": objectCompany.co_latitude,
-                        "co_longitude": objectCompany.co_longitude,
-                        "logo": logo,
-                        "ur_typeuser": 1,
-                        "admin": True
-                    }
-                return redirect('reinventa_app:panel-control')
+                    logo = objectCompany.co_logo.url if objectCompany.co_logo else ""
+                    address = objectCompany.co_address if objectCompany.co_address else ""
+                    latitude = objectCompany.co_latitude if objectCompany.co_latitude else ""
+                    longitude = objectCompany.co_longitude if objectCompany.co_longitude else ""
 
+                request.session['objectCompany'] = {
+                    "co_name": user.username,
+                    "co_address": address,
+                    "co_latitude": latitude,
+                    "co_longitude": longitude,
+                    "logo": logo,
+                    "ur_typeuser": 1,
+                    "admin": True
+                }
+                return redirect('reinventa_app:panel-control')
             
         else:
             data['error'] = 'Usuario o contraseña incorrectos.'

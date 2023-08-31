@@ -117,8 +117,8 @@ class WithdrawalRequestReinventorForm(forms.ModelForm):
         "class": "form-control",
     }
 
-    wrr_date = forms.DateField(input_formats=["%d-%m-%Y"], label="El retiro lo solicito para el día:",
-                                    widget=forms.DateInput(format="%d-%m-%Y",
+    wrr_date = forms.DateField(input_formats=["%Y-%m-%d"], label="El retiro lo solicito para el día:",
+                                    widget=forms.DateInput(format="%Y-%m-%d",
                                                            attrs=tags_input_date), required=True)
     wrr_quantityliters = forms.FloatField(label="Litros para retirar", widget=forms.TextInput(
         attrs=tags_input_general), required=True)
@@ -129,7 +129,6 @@ class WithdrawalRequestReinventorForm(forms.ModelForm):
             'wrr_date',
             'wrr_quantityliters'
         ]
-
 
 
 class ReinventorForm(forms.ModelForm):

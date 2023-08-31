@@ -33,6 +33,7 @@ urlpatterns = [
 
     path('list-request-reinventor/', views.listRequestReinventor, name='list-request-reinventor'),
     path('crear-request-reinventor/', views.addRequestReinventor, name='crear-request-reinventor'),
+    path('edit-request-reinventor/<int:wrr_id>', views.editRequestReinventor, name='edit-request-reinventor'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

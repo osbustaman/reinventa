@@ -113,16 +113,18 @@ def configurationCompany(request):
         form = CompanyForm(instance=objCompany)
         acction = 'editar'
         co_id = objCompany.co_id
+        logo = objCompany.co_logo
     else:
         form = CompanyForm()
         acction = 'crear'
         co_id = False
+        logo = ""
 
     data = {
         'form': form,
         'acction': acction,
         'co_id': co_id,
-        'logo': objCompany.co_logo
+        'logo': logo
     }
     return render(request, 'administrator/pages/form_company.html', data)
 
@@ -417,8 +419,6 @@ def listRequestReinventor(request):
 
 @login_required
 def addRequestReinventor(request):
-
-
     if request.method == 'POST':
         form = WithdrawalRequestReinventorForm(request.POST)
         
@@ -437,8 +437,8 @@ def addRequestReinventor(request):
             rt.rt_observation = "se envia correo de solicitud"
             rt.save()
 
-            messages.success(request, 'Reinventor creado exitosamente!.')
-            return redirect('reinventa_app:edit-reinventor', re_id=frm.re_id)
+            messages.success(request, 'Solicitud creada exitosamente!.')
+            return redirect('reinventa_app:edit-request-reinventor', wrr_id=frm.wrr_id)
         
         else:
             for field in form:
@@ -449,6 +449,31 @@ def addRequestReinventor(request):
     
     data = {
         'action': 'Crear',
-        #'form': form
+        'form': form
     }
     return render(request, 'reinventor/pages/request.html', data)
+
+@login_required
+def editRequestReinventor(request, wrr_id):
+    object = get_object_or_404(WithdrawalRequestReinventor, wrr_id=wrr_id)
+
+    if request.method == 'POST':
+        form = WithdrawalRequestReinventorForm(request.POST, instance=object)
+        if form.is_valid():
+            frm = form.save(commit=False)
+            frm.save()
+
+            # Agregar mensaje de éxito
+            messages.success(request, 'Solicitud editada exitosamente.')
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
+    else:
+        form = WithdrawalRequestReinventorForm(instance=object)
+
+    data = {
+        'action': 'Editar',
+        'form': form,
+    }
+    return render(request, 'administrator/pages/form_reinventor.html', data)
