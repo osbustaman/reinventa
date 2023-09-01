@@ -38,24 +38,21 @@ Listado de Solicitudes
         <tr>
             <th>#</th>
             <th>Usuario</th>
-            <th>Reinventor</th>
-            <th>Fecha y hora de retiro</th>
+            <th>Fecha del retiro</th>
             <th>Listros de aceite</th>
             <th>Estado de la solicitud</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        {% for object in objectData %}
+        {% for object in objects %}
         <tr>
-            <td>{{ object.re_id }}</td>
-            <td>{{ object.re_nameentity }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td>{{ object.re_createaddress }}</td>
-            <td><button type="button" class="btn btn-info btn-sm" onclick="">Editar</button><button type="button"
-                    class="btn btn-danger btn-sm" onclick="">Eliminar</button></td>
+            <td>{{ object.wrr_id }}</td>
+            <td>{{ object.user.first_name | upper }} {{ object.user.last_name | upper }}</td>
+            <td>{{ object.wrr_date }}</td>
+            <td>{{ object.wrr_quantityliters }}</td>
+            <td>{{ object.get_wrr_estaterequest_display }}</td>
+            <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-request-reinventor' object.wrr_id %}')">Ver Solicitud</button></td>
         </tr>
         {% endfor %}
     </tbody>

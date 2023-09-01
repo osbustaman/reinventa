@@ -32,16 +32,17 @@
 {% block menu_action %}
 <ul class="nav navbar-right panel_toolbox">
     <li>
-        <button type="submit" class="btn btn-info btn-sm" form="form">{{ action }} Reinventor <i class="fa fa-floppy-o"></i></button>
+
+        {% if action == 'Crear' %}
+        <button type="submit" class="btn btn-info btn-sm" form="form">{{ action }} Solicitud <i class="fa fa-floppy-o"></i></button>
+        {% endif %}
         
         {% if action == 'Editar' %}
-    
-        <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('')">Observaciones <i class="fa fa-clipboard"></i></button>
-
+        <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:add-observations' wrr_id %}')">Observaciones <i class="fa fa-clipboard"></i></button>
         {% endif %}
 
         <button type="button" class="btn btn-info btn-sm"
-                onclick="redirectToUrl('{% url 'reinventa_app:list-request-reinventor' %}')">Volver <i
+                onclick="redirectToUrl('{{ linkBack }}')">Volver <i
                     class="fa fa-arrow-left"></i></button>
     </li>
 </ul>
@@ -92,19 +93,19 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Usuario</th>
                     <th>Nombres</th>
+                    <th>Reinventor</th>
                     <th>Apellidos</th>
                     <th>Correo</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                {% for object in objectsUserReinventors %}
+                {% for object in objectsObservations %}
                 <tr>
                     <td>{{ object.user.id }}</td>
-                    <td>{{ object.user.username }}</td>
-                    <td>{{ object.user.first_name }}</td>
+                    <td>{{ object.user.first_name | upper }} {{ object.user.last_name | upper }}</td>
+                    <td>{{ object.user.withdrawalRequestReinventor.reinventor.re_nameentity | upper }}</td>
                     <td>{{ object.user.last_name }}</td>
                     <td>{{ object.user.email }}</td>
                     <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl()">Editar</button><button type="button"

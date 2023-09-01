@@ -174,7 +174,7 @@ class WithdrawalRequestReinventor(TimeStampedModel):
     wrr_date = models.CharField("Fecha de retiro", null=True, blank=True, max_length=30)
     wrr_quantityliters = models.FloatField("Litros de aceite", null=True, blank=True)
     wrr_estaterequest = models.IntegerField(
-        "Estado de la solicitud", choices=ESTATE_REQUEST, default=1)
+        "Estado de la solicitud", choices=ESTATE_REQUEST, default=1, null=True, blank=True)
     wrr_active = models.CharField(
         "Activo", max_length=1, choices=OPTIONS, default="Y")
 
@@ -202,7 +202,7 @@ class RequestTracking(TimeStampedModel):
     
     rt_estaterequest = models.CharField("Estado de la solicitud", max_length=50, blank=True, null=True)
     
-    rt_observation = models.TextField("Latitud", null=True, blank=True)
+    rt_observation = models.TextField("Observación", null=True, blank=True)
 
     def __int__(self):
         return self.rt_id

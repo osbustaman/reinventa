@@ -1,6 +1,6 @@
 from django import forms
 
-from applications.account.models import Comuna, Pais, Region, Reinventor, WithdrawalRequestReinventor
+from applications.account.models import Comuna, Pais, Region, Reinventor, RequestTracking, WithdrawalRequestReinventor
 from applications.reinventor.models import Company
 
 from django.contrib.auth.forms import User
@@ -123,11 +123,31 @@ class WithdrawalRequestReinventorForm(forms.ModelForm):
     wrr_quantityliters = forms.FloatField(label="Litros para retirar", widget=forms.TextInput(
         attrs=tags_input_general), required=True)
     
+    wrr_estaterequest = forms.ChoiceField(label="Estado de la solicitud", choices=WithdrawalRequestReinventor.ESTATE_REQUEST,
+                                      widget=forms.Select(attrs={'class': 'form-control'}), required=False)
     class Meta:
         model = WithdrawalRequestReinventor
         fields = [
             'wrr_date',
-            'wrr_quantityliters'
+            'wrr_quantityliters',
+            'wrr_estaterequest'
+        ]
+
+
+class RequestTrackingForm(forms.ModelForm):
+
+    tags_input_general = {
+        'class': 'form-control',
+        'autocomplete': 'off'
+    }
+    
+    rt_observation = forms.CharField(label="Observación", widget=forms.Textarea(
+        attrs=tags_input_general), required=True)
+    
+    class Meta:
+        model = RequestTracking
+        fields = [
+            'rt_observation'
         ]
 
 

@@ -34,6 +34,10 @@ urlpatterns = [
     path('list-request-reinventor/', views.listRequestReinventor, name='list-request-reinventor'),
     path('crear-request-reinventor/', views.addRequestReinventor, name='crear-request-reinventor'),
     path('edit-request-reinventor/<int:wrr_id>', views.editRequestReinventor, name='edit-request-reinventor'),
+    path('ver-request-reinventor-adm/<int:wrr_id>', views.editRequestReinventor, name='edit-request-reinventor-adm'),
 
+
+    path('add-observations/<int:wrr_id>', views.addObservations, name='add-observations'),
+    path('edit-observations/<int:wrr_id>/<int:rt_id>', views.editObservations, name='edit-observations'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

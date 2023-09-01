@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.contrib.auth.hashers import make_password
 
 from applications.account.models import Comuna, Pais, Region, Reinventor, RequestTracking, UserReinventor, WithdrawalRequestReinventor
-from applications.reinventor.forms import CompanyForm, ReinventorForm, ReinventorLogoForm, UserForm, WithdrawalRequestReinventorForm
+from applications.reinventor.forms import CompanyForm, ReinventorForm, ReinventorLogoForm, RequestTrackingForm, UserForm, WithdrawalRequestReinventorForm
 from applications.reinventor.models import Company
 from reinventa.utils import getLatitudeLongitude
 
@@ -410,9 +410,10 @@ def deleteReinventor(request, re_id):
 
 @login_required
 def listRequestReinventor(request):
-
+    reinventor = Reinventor.objects.get(re_id=request.session['objectCompany']['re_id'])
+    objectsWithdrawalRequestReinventor = WithdrawalRequestReinventor.objects.filter(reinventor=reinventor)
     data = {
-
+        'objects': objectsWithdrawalRequestReinventor,
     }
     return render(request, 'reinventor/pages/list_request_reinventor.html', data)
 
@@ -446,34 +447,105 @@ def addRequestReinventor(request):
                     messages.error(request, f"{field.label}: {error}")
     else:
         form = WithdrawalRequestReinventorForm()
+
+    if 'ver-request-reinventor-adm/' in request.path:
+        linkBack = reverse('reinventa_app:ver-request')
+        viewEstaterequest = True
+    else:
+        linkBack = reverse('reinventa_app:list-request-reinventor')
+        viewEstaterequest = False
     
     data = {
         'action': 'Crear',
-        'form': form
+        'form': form,
+        'linkBack': linkBack,
+        'viewEstaterequest': viewEstaterequest
     }
     return render(request, 'reinventor/pages/request.html', data)
 
 @login_required
 def editRequestReinventor(request, wrr_id):
+    if 'ver-request-reinventor-adm/' in request.path:
+        linkBack = reverse('reinventa_app:ver-request')
+        viewEstaterequest = True
+    else:
+        linkBack = reverse('reinventa_app:list-request-reinventor')
+        viewEstaterequest = False
+
     object = get_object_or_404(WithdrawalRequestReinventor, wrr_id=wrr_id)
+    form = WithdrawalRequestReinventorForm(instance=object)
+
+    objectsObservations = RequestTracking.objects.filter(withdrawalRequestReinventor=object)
+
+    data = {
+        'action': 'Editar',
+        'form': form,
+        'linkBack': linkBack,
+        'viewEstaterequest': viewEstaterequest,
+        'wrr_id': wrr_id,
+        'objectsObservations': objectsObservations
+    }
+    return render(request, 'reinventor/pages/request.html', data)
+
+
+@login_required
+def addObservations(request, wrr_id):
 
     if request.method == 'POST':
-        form = WithdrawalRequestReinventorForm(request.POST, instance=object)
+        form = RequestTrackingForm(request.POST)
+        
         if form.is_valid():
+            # Guardar los datos del formulario UserForm
             frm = form.save(commit=False)
+            frm.user = User.objects.get(id = request.session['id'])
+            frm.withdrawalRequestReinventor = WithdrawalRequestReinventor.objects.get(wrr_id=wrr_id)
             frm.save()
 
-            # Agregar mensaje de éxito
-            messages.success(request, 'Solicitud editada exitosamente.')
+            messages.success(request, 'Observación creada exitosamente!.')
+            return redirect('reinventa_app:edit-observations', wrr_id=wrr_id, rt_id=frm.rt_id)
+        
         else:
             for field in form:
                 for error in field.errors:
                     messages.error(request, f"{field.label}: {error}")
     else:
-        form = WithdrawalRequestReinventorForm(instance=object)
-
+        form = RequestTrackingForm()
     data = {
-        'action': 'Editar',
+        'action': 'Crear',
         'form': form,
+        'wrr_id': wrr_id
     }
-    return render(request, 'administrator/pages/form_reinventor.html', data)
+    return render(request, 'administrator/pages/form_observation.html', data)
+
+@login_required
+def editObservations(request, wrr_id, rt_id):
+    object = get_object_or_404(RequestTracking, rt_id=rt_id)
+
+    if request.method == 'POST':
+        form = RequestTrackingForm(request.POST, instance=object)
+        
+        if form.is_valid():
+            # Guardar los datos del formulario UserForm
+            frm = form.save(commit=False)
+            frm.save()
+
+            messages.success(request, 'Observación editada exitosamente!.')
+        
+        else:
+            for field in form:
+                for error in field.errors:
+                    messages.error(request, f"{field.label}: {error}")
+    else:
+        form = RequestTrackingForm(instance=object)
+    
+    data = {
+        'form': form,
+        'action': 'Editar',
+        'id': id,
+        'wrr_id': wrr_id,
+        'rt_id': rt_id
+    }
+    return render(request, 'administrator/pages/form_observation.html', data)
+
+
+
