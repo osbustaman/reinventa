@@ -39,9 +39,6 @@ env
 *.ods
 *.odp
 
-static/gentella
-static/maps
-
 **/gentella/*.html
 !**/maps
 
