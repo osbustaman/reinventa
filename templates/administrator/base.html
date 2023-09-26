@@ -30,83 +30,13 @@
 
     <!-- Custom Theme Style -->
     <link href="{% statics_tag 'build/css/custom.min.css' %}" rel="stylesheet">
+
+
+    <link href="{% statics_tag 'build/css/override.css' %}" rel="stylesheet">
     
 
     {% block static_up %}
     {% endblock %}
-
-    <style>
-
-        body {
-            background: #1A5A3F;
-        }
-
-        body .container.body .right_col {
-            background: #E3EFD0;
-        }
-
-        .nav_menu {
-            background: #9BC65B;
-            border-bottom: 1px solid #158353;
-        }
-
-        .div_center {
-            display: flex;
-            justify-content: center;
-        }
-
-        .div_center_son {
-            width: 120px;
-            height: 120px;
-            /* centrado vertical */
-            position: absolute;
-            top: 40%;
-        }
-
-        .left_col {
-            background: #1A5A3F;
-        }
-
-
-        .nav_title {
-            background: #1A5A3F;
-        }
-
-        .sidebar-footer {
-            background: #158353;
-        }
-
-        .sidebar-footer a {
-            background: #1A5A3F;
-        }
-
-        .sidebar-footer a:hover {
-            background: #9BC65B;
-        }
-
-        .nav.side-menu>li.active>a {
-            text-shadow: rgba(0,0,0,0.25) 0 -1px 0;
-            background: -webkit-gradient(linear, left top, left bottom, from(#9BC65B), to(#9BC65B)),#9BC65B;
-            background: linear-gradient(#9BC65B, #9BC65B),#9BC65B;
-            -webkit-box-shadow: rgba(0,0,0,0.25) 0 1px 0, inset rgba(255,255,255,0.16) 0 1px 0;
-            box-shadow: rgba(0,0,0,0.25) 0 1px 0, inset rgba(255,255,255,0.16) 0 1px 0;
-        }
-
-        .nav-md ul.nav.child_menu li:before {
-            background: #9BC65B;
-        }
-
-        .nav-md ul.nav.child_menu li:after {
-            border-left: 1px solid #9BC65B;
-        }
-
-        .nav.side-menu>li.current-page, .nav.side-menu>li.active {
-            border-right: 5px solid #9BC65B;
-        }
-
-        
-        
-    </style>
 </head>
 
 <body class="nav-md">
@@ -127,10 +57,10 @@
                     <!-- menu profile quick info -->
                     <div class="profile clearfix" style="margin-top: 20%;">
                         <div class="profile_pic">
-                            <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+                            <img src="{{ request.session.logo_user }}" alt="..." class="img-circle profile_img">
                         </div>
                         <div class="profile_info">
-                            <span>Bienvenido,</span>
+                            <span>Bienvenido, </span>
                             <h2>{{ request.session.first_name|title }} {{ request.session.last_name|title }}</h2>
                         </div>
                     </div>
@@ -211,7 +141,7 @@
                             <li class="nav-item dropdown open" style="padding-left: 15px;">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true"
                                     id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="images/img.jpg" alt="">{{ request.session.first_name|title }} {{ request.session.last_name|title }}
+                                    <img src="{{ request.session.logo_user }}" alt="">{{ request.session.first_name|title }} {{ request.session.last_name|title }}
                                 </a>
                                 <div class="dropdown-menu dropdown-usermenu pull-right"
                                     aria-labelledby="navbarDropdown">

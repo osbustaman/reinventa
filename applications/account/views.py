@@ -29,6 +29,10 @@ def userLogin(request):
             logo = ""
             try:
                 objectUserReinventor = UserReinventor.objects.get(user=user)
+
+                logo_user = objectUserReinventor.ur_logo.url if objectCompany.co_logo else "../media/site/user_default.png"
+                request.session['logo_user'] = f"{logo_user}"
+
                 if objectUserReinventor.ur_typeuser == 1:
                     objectCompany = (Company.objects.all()).first()
 
@@ -63,6 +67,9 @@ def userLogin(request):
             
             except:
                 objectCompany = (Company.objects.all()).first()
+
+                logo_user = "../media/site/user_default.png"
+                request.session['logo_user'] = f"{logo_user}"
 
                 logo = ""
                 address = ""

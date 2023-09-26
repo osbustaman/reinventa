@@ -135,6 +135,8 @@ class UserReinventor(TimeStampedModel):
                              db_column="ur_reinventor_id", on_delete=models.PROTECT, null=True, blank=True)
     ur_typeuser = models.IntegerField(
         "Tipo de usuario", choices=TYPE_USER, default=0)
+    ur_logo = models.ImageField(
+        "Imagen usuario", help_text=" Formatos .jpg|.png|.gif|.jpeg", upload_to='image/logo/', default='../media/site/user_default.png', null=True, blank=True)
     ur_active = models.CharField(
         "Activo", choices=OPTIONS, max_length=1, default="Y")
 
