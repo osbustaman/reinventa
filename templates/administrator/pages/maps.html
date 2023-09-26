@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block menu_action %}
-
+{% if request.session.objectCompany.ur_typeuser == 1 %}
 <div class="row">
     <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
         <div class="tile-stats">
@@ -72,6 +72,7 @@
     </div>
     
 </div>
+{% endif %}
 {% endblock %}
 
 {% block content_page %}

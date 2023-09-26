@@ -1,4 +1,11 @@
 import re
+import smtplib
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
 from geopy.distance import geodesic
 from geopy.geocoders import Nominatim
@@ -51,3 +58,53 @@ def isWithinTheDiameter(lat_a, lon_a, lat_b, lon_b, radio_km = 0.1):
 
     # Verificar si la distancia es menor o igual al radio deseado
     return distance_km <= radio_km
+
+
+def send_mail():
+    # Configura los parámetros del servidor SMTP
+    smtp_server = 'smtp.tu_servidor.com'
+    smtp_port = 587  # El puerto puede variar según el servidor de correo
+    smtp_user = 'tu_correo@gmail.com'
+    smtp_password = 'tu_contraseña'
+
+    # Crea un objeto MIME para el mensaje
+    msg = MIMEMultipart()
+    msg['From'] = 'tu_correo@gmail.com'
+    msg['To'] = 'destinatario@example.com'
+    msg['Subject'] = 'Asunto del correo'
+
+    # Agrega el cuerpo del mensaje (puede ser HTML)
+    body = "Hola, este es un correo de prueba con un archivo PDF adjunto."
+    msg.attach(MIMEText(body, 'plain'))
+
+
+    # Genera un archivo PDF en memoria
+    pdf_buffer = BytesIO()
+    pdf = canvas.Canvas(pdf_buffer)
+    pdf.drawString(100, 750, "Hola, este es un PDF generado desde Python.")
+    pdf.showPage()
+    pdf.save()
+
+    # Adjunta el archivo PDF generado
+    pdf_attachment_part = MIMEApplication(pdf_buffer.getvalue(), Name='archivo.pdf')
+    pdf_attachment_part['Content-Disposition'] = 'attachment; filename="archivo.pdf"'
+    msg.attach(pdf_attachment_part)
+
+    # Reinicia el buffer
+    pdf_buffer.close()
+
+    # Inicia una conexión segura con el servidor SMTP
+    try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+
+        # Envía el correo
+        server.sendmail(smtp_user, msg['To'], msg.as_string())
+
+        # Cierra la conexión con el servidor SMTP
+        server.quit()
+        print("Correo con archivo PDF generado y adjunto enviado con éxito")
+
+    except Exception as e:
+        print("Error al enviar el correo:", str(e))

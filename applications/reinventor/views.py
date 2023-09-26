@@ -150,6 +150,9 @@ def addConfiguration(request):
             frm.co_longitude = lng
             frm.save()
 
+
+            request.session['logo_company'] = frm.co_logo
+
             messages.success(request, 'Configuración creada exitosamente!.')
             return redirect('reinventa_app:configuracion')
         
@@ -182,6 +185,8 @@ def editConfiguration(request, co_id):
             frm.co_latitude = lat
             frm.co_longitude = lng
             frm.save()
+
+            request.session['logo_company'] = f"media/{frm.co_logo.name}"
 
             # Agregar mensaje de éxito
             messages.success(request, 'Datos editados exitosamente!.')

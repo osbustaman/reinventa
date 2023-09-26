@@ -43,6 +43,8 @@ def userLogin(request):
                             "logo": logo,
                             "ur_typeuser": objectUserReinventor.ur_typeuser,
                         }
+
+                        request.session['logo_company'] = f"{logo}"
                     return redirect('reinventa_app:panel-control')
                 else:
                     logo = objectUserReinventor.reinventor.re_logo.url if objectUserReinventor.reinventor.re_logo else ""
@@ -56,6 +58,7 @@ def userLogin(request):
                             "ur_typeuser": objectUserReinventor.ur_typeuser,
                             "re_id": objectUserReinventor.reinventor.re_id,
                         }
+                    request.session['logo_company'] = f"{logo}"
                     return redirect('reinventa_app:list-request-reinventor')
             
             except:
@@ -80,6 +83,8 @@ def userLogin(request):
                     "ur_typeuser": 1,
                     "admin": True
                 }
+
+                request.session['logo_company'] = f"{logo}"
                 return redirect('reinventa_app:panel-control')
             
         else:

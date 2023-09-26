@@ -34,6 +34,79 @@
 
     {% block static_up %}
     {% endblock %}
+
+    <style>
+
+        body {
+            background: #1A5A3F;
+        }
+
+        body .container.body .right_col {
+            background: #E3EFD0;
+        }
+
+        .nav_menu {
+            background: #9BC65B;
+            border-bottom: 1px solid #158353;
+        }
+
+        .div_center {
+            display: flex;
+            justify-content: center;
+        }
+
+        .div_center_son {
+            width: 120px;
+            height: 120px;
+            /* centrado vertical */
+            position: absolute;
+            top: 40%;
+        }
+
+        .left_col {
+            background: #1A5A3F;
+        }
+
+
+        .nav_title {
+            background: #1A5A3F;
+        }
+
+        .sidebar-footer {
+            background: #158353;
+        }
+
+        .sidebar-footer a {
+            background: #1A5A3F;
+        }
+
+        .sidebar-footer a:hover {
+            background: #9BC65B;
+        }
+
+        .nav.side-menu>li.active>a {
+            text-shadow: rgba(0,0,0,0.25) 0 -1px 0;
+            background: -webkit-gradient(linear, left top, left bottom, from(#9BC65B), to(#9BC65B)),#9BC65B;
+            background: linear-gradient(#9BC65B, #9BC65B),#9BC65B;
+            -webkit-box-shadow: rgba(0,0,0,0.25) 0 1px 0, inset rgba(255,255,255,0.16) 0 1px 0;
+            box-shadow: rgba(0,0,0,0.25) 0 1px 0, inset rgba(255,255,255,0.16) 0 1px 0;
+        }
+
+        .nav-md ul.nav.child_menu li:before {
+            background: #9BC65B;
+        }
+
+        .nav-md ul.nav.child_menu li:after {
+            border-left: 1px solid #9BC65B;
+        }
+
+        .nav.side-menu>li.current-page, .nav.side-menu>li.active {
+            border-right: 5px solid #9BC65B;
+        }
+
+        
+        
+    </style>
 </head>
 
 <body class="nav-md">
@@ -41,14 +114,18 @@
         <div class="main_container">
             <div class="col-md-3 left_col menu_fixed">
                 <div class="left_col scroll-view">
-                    <div class="navbar nav_title" style="border: 0;">
-                        <a href="#" class="site_title"><i class="fa fa-user"></i> <span>LokiLabs</span></a>
+                    <div class="navbar nav_title div_center" style="border: 0;">
+                        <div class="div_center_son">
+                            <a href="javascript:void()" class="am-logo">
+                                <img src="{{ request.session.logo_company }}" width="450" class="img-fluid img-thumbnail img-thumbnail-logo" alt="">
+                            </a>
+                        </div>
                     </div>
 
                     <div class="clearfix"></div>
 
                     <!-- menu profile quick info -->
-                    <div class="profile clearfix">
+                    <div class="profile clearfix" style="margin-top: 20%;">
                         <div class="profile_pic">
                             <img src="images/img.jpg" alt="..." class="img-circle profile_img">
                         </div>
@@ -87,6 +164,11 @@
                             </ul>
                             {% else %}
                             <ul class="nav side-menu">
+                                <li><a><i class="fa fa-home"></i> Inicio <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{% url 'reinventa_app:panel-control' %}">Dashboard</a></li>
+                                    </ul>
+                                </li>
                                 <li id="clientes" {% if request.session.item == 'reinventores' %}class="active"{% else %}{% endif %}><a><i class="fa fa-building"></i> Reinventores <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" {% if request.session.item == 'reinventores' %}style="display: block;"{% endif %}> 
                                         <li {% if request.session.sub_item == 'list_request_reinventor' %}class="current-page"{% endif %}><a href="{% url 'reinventa_app:list-request-reinventor' %}">Solicitudes</a></li>
