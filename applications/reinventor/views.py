@@ -121,7 +121,7 @@ def configurationCompany(request):
         form = CompanyForm()
         acction = 'crear'
         co_id = False
-        logo = ""
+        logo = "../media/site/default_image.jpg"
 
     data = {
         'form': form,
