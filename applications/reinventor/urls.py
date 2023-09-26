@@ -2,6 +2,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.urls import path
+
+from applications.reinventor.views_error import error404
 from . import views
 
 app_name = 'reinventa_app'
@@ -39,5 +41,14 @@ urlpatterns = [
 
     path('add-observations/<int:wrr_id>', views.addObservations, name='add-observations'),
     path('edit-observations/<int:wrr_id>/<int:rt_id>', views.editObservations, name='edit-observations'),
+
+
+
+
+
+
+
+
+    path('error404/', error404, name='error404'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

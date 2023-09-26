@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.contrib.auth.hashers import make_password
 
 from applications.account.models import Comuna, Pais, Region, Reinventor, RequestTracking, UserReinventor, WithdrawalRequestReinventor
+from applications.reinventor.decorators import is_data
 from applications.reinventor.forms import CompanyForm, ReinventorForm, ReinventorLogoForm, RequestTrackingForm, UserForm, WithdrawalRequestReinventorForm
 from applications.reinventor.models import Company
 from reinventa.utils import getLatitudeLongitude
@@ -15,6 +16,7 @@ from reinventa.utils import getLatitudeLongitude
 # Create your views here.
 
 @login_required
+@is_data
 def viewRequestAdmin(request):
     objectsWithdrawalRequestReinventor = WithdrawalRequestReinventor.objects.filter(wrr_active = "Y")
 
@@ -95,6 +97,7 @@ def editUserAdmin(request, id):
 
 
 @login_required
+@is_data
 def viewUserAdmin(request):
     objectsUserReinventor = UserReinventor.objects.filter(ur_active = "Y", ur_typeuser = 1)
 
@@ -212,6 +215,7 @@ def controlPanel(request):
 
 
 @login_required
+@is_data
 def verReinventores(request):
     objectData = Reinventor.objects.filter(re_active = "Y")
     data = {
