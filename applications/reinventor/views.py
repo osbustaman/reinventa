@@ -117,6 +117,7 @@ def configurationCompany(request):
         acction = 'editar'
         co_id = objCompany.co_id
         logo = objCompany.co_logo
+        request.session['logo_company'] = logo.url
     else:
         form = CompanyForm()
         acction = 'crear'
@@ -136,7 +137,7 @@ def configurationCompany(request):
 def addConfiguration(request):
 
     if request.method == 'POST':
-        form = CompanyForm(request.POST)
+        form = CompanyForm(request.POST, request.FILES)
         
         if form.is_valid():
             # Guardar los datos del formulario UserForm
@@ -144,17 +145,20 @@ def addConfiguration(request):
             frm.pais = Pais.objects.get(pa_id = request.POST['pais'])
             frm.region = Region.objects.get(re_id = request.POST['region'])
             frm.comuna = Comuna.objects.get(com_id = request.POST['comuna'])
-            frm.save()
+            
 
             address = f"{ frm.co_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
-            lat, lng = getLatitudeLongitude(address)
-            
-            frm.co_latitude = lat
-            frm.co_longitude = lng
+            lat_lng = getLatitudeLongitude(address)
+
+            if not lat_lng:
+                messages.error(request, "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente")
+                return redirect('reinventa_app:configuracion')
+
             frm.save()
-
-
-            request.session['logo_company'] = frm.co_logo
+            
+            frm.co_latitude = lat_lng['latitude']
+            frm.co_longitude = lat_lng['longitude']
+            frm.save()
 
             messages.success(request, 'Configuración creada exitosamente!.')
             return redirect('reinventa_app:configuracion')
@@ -183,10 +187,14 @@ def editConfiguration(request, co_id):
             frm.save()
 
             address = f"{ frm.co_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
-            lat, lng = getLatitudeLongitude(address)
+            lat_lng = getLatitudeLongitude(address)
+
+            if not lat_lng:
+                messages.error(request, "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente")
+                return redirect('reinventa_app:configuracion')
             
-            frm.co_latitude = lat
-            frm.co_longitude = lng
+            frm.co_latitude = lat_lng['latitude']
+            frm.co_longitude = lat_lng['longitude']
             frm.save()
 
             request.session['logo_company'] = f"media/{frm.co_logo.name}"
@@ -205,10 +213,22 @@ def editConfiguration(request, co_id):
 
 @login_required
 def controlPanel(request):
-    lstReinventrs = Reinventor.objects.filter(re_active = "Y")
+    
+    excluded_results  = Reinventor.objects.filter(re_active='Y').filter(re_latitude__isnull=False, re_longitude__isnull=False)
+    lstReinventrs = Reinventor.objects.filter(re_active='Y').exclude(re_latitude='').exclude(re_longitude='')
+
+    try:
+        objectCompany = Company.objects.all().first()
+        request.session['lat_lng'] = {
+            "co_latitude": objectCompany.co_latitude,
+            "co_longitude": objectCompany.co_longitude,
+        }
+    except:
+        pass
 
     data = {
         'lstReinventrs': lstReinventrs,
+        'excluded_results': excluded_results,
         'cantReinventors': len(lstReinventrs)
     }
     return render(request, 'administrator/pages/maps.html', data)
@@ -310,13 +330,17 @@ def addReinventor(request):
             frm.pais = Pais.objects.get(pa_id = request.POST['pais'])
             frm.region = Region.objects.get(re_id = request.POST['region'])
             frm.comuna = Comuna.objects.get(com_id = request.POST['comuna'])
-            frm.save()
-
-            address = f"{ frm.re_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
-            lat, lng = getLatitudeLongitude(address)
             
-            frm.re_latitude = lat
-            frm.re_longitude = lng
+            address = f"{ frm.re_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
+            lat_lng = getLatitudeLongitude(address)
+
+            if not lat_lng:
+                frm.save()
+                messages.error(request, "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente")
+                return redirect('reinventa_app:add-reinventor')
+            
+            frm.re_latitude = lat_lng['latitude']
+            frm.re_longitude = lat_lng['longitude']
             frm.save()
 
             messages.success(request, 'Reinventor creado exitosamente!.')
@@ -345,13 +369,17 @@ def editReinventor(request, re_id):
             frm.pais = Pais.objects.get(pa_id = request.POST['pais'])
             frm.region = Region.objects.get(re_id = request.POST['region'])
             frm.comuna = Comuna.objects.get(com_id = request.POST['comuna'])
-            frm.save()
-
-            address = f"{ frm.re_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
-            lat, lng = getLatitudeLongitude(address)
             
-            frm.re_latitude = lat
-            frm.re_longitude = lng
+            address = f"{ frm.re_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
+            lat_lng = getLatitudeLongitude(address)
+
+            if not lat_lng:
+                frm.save()
+                messages.error(request, "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente")
+                return redirect('reinventa_app:edit-reinventor', re_id=re_id)
+        
+            frm.re_latitude = lat_lng['latitude']
+            frm.re_longitude = lat_lng['longitude']
             frm.save()
 
             # Agregar mensaje de éxito
@@ -362,6 +390,9 @@ def editReinventor(request, re_id):
                     messages.error(request, f"{field.label}: {error}")
     else:
         form = ReinventorForm(instance=object)
+
+    if object.re_latitude=='' and object.re_longitude=='':
+        messages.error(request, f"La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente")
 
     objectsUserReinventors = UserReinventor.objects.filter(ur_active = "Y", ur_typeuser = 2, reinventor__re_id = re_id)
     formLogo = ReinventorLogoForm(instance=object)

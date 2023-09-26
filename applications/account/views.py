@@ -41,11 +41,14 @@ def userLogin(request):
 
                         request.session['objectCompany'] = {
                             "co_name": objectCompany.co_name,
-                            "co_address": objectCompany.co_address,
-                            "co_latitude": objectCompany.co_latitude,
-                            "co_longitude": objectCompany.co_longitude,
                             "logo": logo,
                             "ur_typeuser": objectUserReinventor.ur_typeuser,
+                            "co_address": objectCompany.co_address
+                        }
+
+                        request.session['lat_lng'] = {
+                            "co_latitude": objectCompany.co_latitude,
+                            "co_longitude": objectCompany.co_longitude,
                         }
 
                         request.session['logo_company'] = f"{logo}"
@@ -55,12 +58,14 @@ def userLogin(request):
                     
                     request.session['objectCompany'] = {
                             "co_name": objectUserReinventor.reinventor.re_nameentity,
-                            "co_address": objectUserReinventor.reinventor.re_address,
-                            "co_latitude": objectUserReinventor.reinventor.re_latitude,
-                            "co_longitude": objectUserReinventor.reinventor.re_longitude,
-                            "logo": logo,
                             "ur_typeuser": objectUserReinventor.ur_typeuser,
                             "re_id": objectUserReinventor.reinventor.re_id,
+                            "co_address": objectUserReinventor.reinventor.re_address
+                        }
+                    
+                    request.session['lat_lng'] = {
+                            "co_latitude": objectUserReinventor.reinventor.re_latitude,
+                            "co_longitude": objectUserReinventor.reinventor.re_longitude,
                         }
                     request.session['logo_company'] = f"{logo}"
                     return redirect('reinventa_app:list-request-reinventor')
@@ -83,12 +88,14 @@ def userLogin(request):
 
                 request.session['objectCompany'] = {
                     "co_name": user.username,
+                    "ur_typeuser": 1,
+                    "admin": True,
                     "co_address": address,
+                }
+
+                request.session['lat_lng'] = {
                     "co_latitude": latitude,
                     "co_longitude": longitude,
-                    "logo": logo,
-                    "ur_typeuser": 1,
-                    "admin": True
                 }
 
                 request.session['logo_company'] = f"{logo}"

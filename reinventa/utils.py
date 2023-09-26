@@ -44,9 +44,12 @@ def getLatitudeLongitude(address):
         if location:
             latitude = location.latitude
             longitude = location.longitude
-            return latitude, longitude
+            return {
+                'latitude': latitude, 
+                'longitude': longitude
+            }
         else:
-            return None, None
+            return False
         
 def isWithinTheDiameter(lat_a, lon_a, lat_b, lon_b, radio_km = 0.1):
     # Crear objetos de ubicación para A y B

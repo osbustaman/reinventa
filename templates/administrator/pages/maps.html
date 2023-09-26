@@ -80,8 +80,8 @@
 
 <script>
     const crate_json = {
-        "startLatitude": {{ request.session.objectCompany.co_latitude }},
-        "startLongitude": {{ request.session.objectCompany.co_longitude }}
+        "startLatitude": {{ request.session.lat_lng.co_latitude }},
+        "startLongitude": {{ request.session.lat_lng.co_longitude }}
     }
 
     const locations = [
