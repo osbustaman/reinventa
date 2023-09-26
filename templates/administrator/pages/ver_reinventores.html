@@ -39,6 +39,7 @@ Listado de Reinventores
             <th>#</th>
             <th>Nombre</th>
             <th>Dirección</th>
+            <th>Latitud y Longitud</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -48,6 +49,13 @@ Listado de Reinventores
             <td>{{ object.re_id }}</td>
             <td>{{ object.re_nameentity }}</td>
             <td>{{ object.re_createaddress }}</td>
+            <td>
+                {% if object.re_latitude and object.re_longitude %}
+                    {{ object.re_latitude }}, {{ object.re_longitude }}
+                {% else %}
+                    Sin asignar
+                {% endif %}
+            </td>
             <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-reinventor' object.re_id %}')">Editar</button><button type="button"
                     class="btn btn-danger btn-sm" onclick="deleteClient('{% url 'reinventa_app:delete-reinventor' object.re_id %}')">Eliminar</button></td>
         </tr>
