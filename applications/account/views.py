@@ -10,7 +10,6 @@ from applications.reinventor.models import Company
 # Create your views here.
 
 def userLogin(request):
-
     data = {
         'form': LoginForm,
     }
@@ -19,22 +18,25 @@ def userLogin(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+
+        if user:
+
             login(request, user)
             request.session['username'] = user.username
             request.session['first_name'] = user.first_name
             request.session['last_name'] = user.last_name
             request.session['id'] = user.id
 
-            logo = ""
-            try:
-                objectUserReinventor = UserReinventor.objects.get(user=user)
+            objectUserReinventor = UserReinventor.objects.filter(user=user)
+            if objectUserReinventor:
 
-                logo_user = objectUserReinventor.ur_logo.url if objectCompany.co_logo else "../media/site/user_default.png"
+                objectUserReinventor = objectUserReinventor.first()
+
+                logo_user = objectUserReinventor.ur_logo.url if objectUserReinventor.ur_logo else "../media/site/user_default.png"
                 request.session['logo_user'] = f"{logo_user}"
 
                 if objectUserReinventor.ur_typeuser == 1:
-                    objectCompany = (Company.objects.all()).first()
+                    objectCompany = Company.objects.first()
 
                     if objectCompany:
                         logo = objectCompany.co_logo.url if objectCompany.co_logo else ""
@@ -53,7 +55,9 @@ def userLogin(request):
 
                         request.session['logo_company'] = f"{logo}"
                     return redirect('reinventa_app:panel-control')
-                else:
+                
+                elif objectUserReinventor.ur_typeuser == 2:
+
                     logo = objectUserReinventor.reinventor.re_logo.url if objectUserReinventor.reinventor.re_logo else ""
                     
                     request.session['objectCompany'] = {
@@ -69,8 +73,8 @@ def userLogin(request):
                         }
                     request.session['logo_company'] = f"{logo}"
                     return redirect('reinventa_app:list-request-reinventor')
-            
-            except:
+
+            else:
                 objectCompany = (Company.objects.all()).first()
 
                 logo_user = "../media/site/user_default.png"
@@ -88,7 +92,8 @@ def userLogin(request):
 
                 request.session['objectCompany'] = {
                     "co_name": user.username,
-                    "ur_typeuser": 1,
+                    "ur_typeuser": objectUserReinventor.ur_typeuser if objectUserReinventor else 1,
+                    "re_id": objectUserReinventor.ur_typeuser if objectUserReinventor else user.id,
                     "admin": True,
                     "co_address": address,
                 }
@@ -100,16 +105,14 @@ def userLogin(request):
 
                 request.session['logo_company'] = f"{logo}"
                 return redirect('reinventa_app:panel-control')
-            
         else:
             data['error'] = 'Usuario o contraseña incorrectos.'
             messages.error(request, 'Usuario o contraseña incorrectos.')
-
             return render(request, 'administrator/login.html', data)
     else:
         return render(request, 'administrator/login.html', data)
-    
+
+
 def logout_view(request):
     logout(request)
     return redirect('account_app:login')
-
