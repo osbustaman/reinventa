@@ -1,3 +1,5 @@
+from decouple import config
+
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -11,6 +13,7 @@ from applications.account.models import Comuna, Pais, Region, Reinventor, Reques
 from applications.reinventor.decorators import is_data
 from applications.reinventor.forms import CompanyForm, ReinventorForm, ReinventorLogoForm, RequestTrackingForm, UserForm, WithdrawalRequestReinventorForm
 from applications.reinventor.models import Company
+from reinventa.Email import EmailSender
 from reinventa.utils import getLatitudeLongitude
 
 # Create your views here.
@@ -170,7 +173,6 @@ def addConfiguration(request):
             return redirect('reinventa_app:configuracion')
     else:
         return redirect('reinventa_app:configuracion')
-    
 
 @login_required
 def editConfiguration(request, co_id):
@@ -209,7 +211,6 @@ def editConfiguration(request, co_id):
         form = CompanyForm(instance=object)
 
     return redirect('reinventa_app:configuracion')
-    
 
 @login_required
 def controlPanel(request):
@@ -232,7 +233,6 @@ def controlPanel(request):
         'cantReinventors': len(lstReinventrs)
     }
     return render(request, 'administrator/pages/maps.html', data)
-
 
 @login_required
 @is_data
@@ -316,7 +316,6 @@ def editUserReinventor(request, re_id, id):
         're_nameentity': objectsReinventor.re_nameentity,
     }
     return render(request, 'administrator/pages/form_user_reinventor.html', data)
-
 
 @login_required
 def addReinventor(request):
@@ -438,15 +437,12 @@ def deleteUserReinventor(request, re_id, id):
     object.save()
     return redirect('reinventa_app:edit-reinventor', re_id=re_id)
 
-
 @login_required
 def deleteReinventor(request, re_id):
     object = get_object_or_404(Reinventor, re_id=re_id)
     object.re_active = 'N'
     object.save()
     return redirect('reinventa_app:ver-reinventores')
-
-
 
 @login_required
 def listRequestReinventor(request):
@@ -457,19 +453,26 @@ def listRequestReinventor(request):
     }
     return render(request, 'reinventor/pages/list_request_reinventor.html', data)
 
-
 @login_required
 def addRequestReinventor(request):
     if request.method == 'POST':
         form = WithdrawalRequestReinventorForm(request.POST)
         
         if form.is_valid():
+
+            user_object = User.objects.get(id = request.session['id'])
+
+
             # Guardar los datos del formulario UserForm
             frm = form.save(commit=False)
-            frm.user = User.objects.get(id = request.session['id'])
+            frm.user = user_object
             frm.reinventor = Reinventor.objects.get(re_id=request.session['objectCompany']['re_id'])
             frm.wrr_estaterequest = 1
             frm.save()
+
+            email_client = frm.user.email
+            asunto = "Solicitud de retiro de residuos"
+            html = f"<p>Estimado {frm.user.first_name} {frm.user.last_name},</p><p>Se ha creado una solicitud de retiro de residuos con el número {frm.wrr_id}.</p><p>Para ver el estado de la solicitud, ingrese a su panel de control.</p><p>Atentamente,</p><p>Equipo de {frm.reinventor.re_nameentity}</p>"
 
             rt = RequestTracking()
             rt.user = frm.user
@@ -477,6 +480,19 @@ def addRequestReinventor(request):
             rt.rt_estaterequest = f"{ frm.wrr_estaterequest }"
             rt.rt_observation = "se envia correo de solicitud"
             rt.save()
+
+                    # Crear una instancia de EmailSender
+            email_sender = EmailSender(
+                    config("MAIL_HOST")
+                    , config("MAIL_PORT")
+                    , config("MAIL_SECURE")
+                    , config("MAIL_USER")
+                    , config("MAIL_PASSWORD")
+                    , config("MAIL_FROMNAME")
+                    , config("MAIL_BBC")
+            )
+
+            send_email = email_sender.send_email(email_client, asunto, html, True)
 
             messages.success(request, 'Solicitud creada exitosamente!.')
             return redirect('reinventa_app:edit-request-reinventor', wrr_id=frm.wrr_id)
@@ -526,7 +542,6 @@ def editRequestReinventor(request, wrr_id):
         'objectsObservations': objectsObservations
     }
     return render(request, 'reinventor/pages/request.html', data)
-
 
 @login_required
 def addObservations(request, wrr_id):

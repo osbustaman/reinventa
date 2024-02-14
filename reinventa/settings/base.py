@@ -111,3 +111,14 @@ SIMPLE_JWT = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DATA_EMAIL = {
+    'MAIL_HOST': config('MAIL_HOST'),
+    'MAIL_PORT': config('MAIL_PORT'),
+    'MAIL_SECURE': config('MAIL_SECURE'),
+    'MAIL_USER': config('MAIL_USER'),
+    'MAIL_BBC': config('MAIL_BBC'),
+    'MAIL_PASSWORD': config('MAIL_PASSWORD'),
+    'MAIL_FROMNAME': config('MAIL_FROMNAME')
+}
