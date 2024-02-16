@@ -40,11 +40,9 @@ urlpatterns = [
 
 
     path('add-observations/<int:wrr_id>', views.addObservations, name='add-observations'),
-    path('edit-observations/<int:wrr_id>/<int:rt_id>', views.editObservations, name='edit-observations'),
+    #path('edit-observations/<int:wrr_id>/<int:rt_id>', views.editObservations, name='edit-observations'),
 
-
-
-
+    path('edit-observations/<int:wrr_id>', views.editObservations, name='edit-observations'),
 
 
 

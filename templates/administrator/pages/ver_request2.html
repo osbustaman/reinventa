@@ -1,0 +1,138 @@
+{% extends 'administrator/base.html' %}
+
+{% load static_tags %}
+{% load static %}
+
+{% block title %}Listado Reinventores{% endblock %}
+
+{% block static_up %}
+<!-- Datatables -->
+
+<link href="{% statics_tag 'vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}"
+    rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% statics_tag 'vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css' %}" rel="stylesheet">
+
+
+{% endblock %}
+
+{% block title_page %}{% endblock %}
+
+{% block sub_title_page %}
+Listado de Solicitudes
+{% endblock %}
+
+{% block menu_action %}
+<ul class="nav navbar-right panel_toolbox">
+    <li>
+        <button type="submit" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">Contestar Solicitud <i class="fa fa-floppy-o"></i></button>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content_page %}
+
+<div class="x_content">
+        <ul class="list-unstyled timeline" style="overflow: scroll; max-height: 400px;">
+
+
+
+            <li>
+                <div class="block">
+                    <div class="tags">
+                        <a href="" class="tag">
+                            <span>Entertainment</span>
+                        </a>
+                    </div>
+                    <div class="block_content">
+                        <h2 class="title">
+                            <a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
+                        </h2>
+                        <div class="byline">
+                            <span>13 hours ago</span> by <a>Jane Smith</a>
+                        </div>
+                        <p class="excerpt">Film festivals used to be do-or-die moments for movie makers. They were where you met
+                            the producers that could fund your project, and if the buyers liked your flick, they’d pay to
+                            Fast-forward and… <a>Read&nbsp;More</a>
+                        </p>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+</div>
+
+
+
+
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Respuesta</h4>
+                <textarea name="respuesta" id="respuesta" cols="30" rows="10" class="form-control"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="save-response" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    $('#save-response').on('click', function() {
+        var respuesta = $('#respuesta').val();
+        $.ajax({
+            url: 'https://api.example.com/data', // URL del servidor
+            type: 'GET', // Método de la solicitud
+            dataType: 'json', // Tipo de datos esperados de la respuesta
+            success: function(data) {
+                // Esta función se ejecuta si la solicitud es exitosa
+                console.log(data); // Imprime los datos recibidos en la consola
+            },
+            error: function(error) {
+                // Esta función se ejecuta si la solicitud falla
+                console.error('Error:', error); // Imprime el error en la consola
+            }
+        });
+    });
+
+
+
+</script>
+
+
+{% endblock %}
+
+{% block static_down %}
+<!-- Datatables -->
+<script src="{% statics_tag 'vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js' %}"></script>
+<script src="{% statics_tag 'vendors/datatables.net-scroller/js/dataTables.scroller.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/jszip/dist/jszip.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/pdfmake/build/pdfmake.min.js' %}"></script>
+<script src="{% statics_tag 'vendors/pdfmake/build/vfs_fonts.js' %}"></script>
+
+
+{% endblock %}
