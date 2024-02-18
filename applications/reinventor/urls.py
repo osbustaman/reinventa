@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from applications.reinventor.views_error import error404
-from . import views
+from . import views, views_ajax
 
 app_name = 'reinventa_app'
 
@@ -40,11 +40,12 @@ urlpatterns = [
 
 
     path('add-observations/<int:wrr_id>', views.addObservations, name='add-observations'),
-    #path('edit-observations/<int:wrr_id>/<int:rt_id>', views.editObservations, name='edit-observations'),
-
-    path('edit-observations/<int:wrr_id>', views.editObservations, name='edit-observations'),
+    path('edit-observations/<int:wrr_id>/<int:rt_id>', views.editObservations, name='edit-observations'),
 
 
+
+    #ajax
+    path('ajax/nueva-observacion/', views_ajax.new_observation, name='new_observation'),
 
 
     path('error404/', error404, name='error404'),

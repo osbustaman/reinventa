@@ -45,10 +45,6 @@
         {% if action == 'Crear' %}
         <button type="submit" class="btn btn-info btn-sm" form="form">{{ action }} Solicitud <i class="fa fa-floppy-o"></i></button>
         {% endif %}
-        
-        {% if action == 'Editar' %}
-        <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:add-observations' wrr_id %}')">Observaciones <i class="fa fa-clipboard"></i></button>
-        {% endif %}
 
         <button type="button" class="btn btn-info btn-sm"
                 onclick="redirectToUrl('{{ linkBack }}')">Volver <i
@@ -128,7 +124,7 @@
                             <p class="excerpt">{{ object.rt_observation|safe }}</p>
                             
                             {% if forloop.last %}
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">Small Button</button>
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">Observación</button>
                             {% endif %}
                         </div>
                     </div>
@@ -145,15 +141,15 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
 
-                    <form method="post" id="form-observation" action="{% url 'reinventa_app:edit-observations' wrr_id %}" enctype="multipart/form-data"></form>
+                    <form method="post" id="form-observation" enctype="multipart/form-data"></form>
                     {% csrf_token %}
                         <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            <h4 class="modal-title" id="myModalLabel">Respuesta</h4>
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h4>Respuesta</h4>
+                            <h4></h4>
                             
                             <div class="form-row">
                                 <div class="form-group col-12">
@@ -224,16 +220,28 @@
         });
     }
 
-    $('#save-response').on('click', function() {
+    $('#save-response').click(function() {
         var respuesta = $('#respuesta').val();
-        
         if (respuesta.length === 0) {
             $.alert('El campo respuesta es obligatorio');
             return;
-        }else{
-            $("#form-observation").submit();
         }
 
+        $.ajax({
+            url: '{% url 'reinventa_app:new_observation' %}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'respuesta': respuesta,
+                'wrr_id': '{{ wrr_id }}'
+            },
+            success: function(data) {
+                location.reload();
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
     });
     
 </script>

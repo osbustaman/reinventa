@@ -16,32 +16,7 @@ from applications.reinventor.models import Company
 from reinventa.Email import EmailSender
 from reinventa.utils import getLatitudeLongitude
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-
 # Create your views here.
-
-@csrf_exempt 
-def save_response(request):
-    if request.method == 'POST':
-        try:
-            # Obtener datos JSON de la solicitud
-            data = json.loads(request.body)
-            
-            # Realizar alguna lógica con los datos
-            resultado = data.get('mensaje', 'No se proporcionó un mensaje válido')
-            
-            # Puedes realizar cualquier operación aquí con los datos recibidos
-
-            # Enviar una respuesta JSON de vuelta
-            response_data = {'resultado': resultado}
-            return JsonResponse(response_data)
-        except json.JSONDecodeError as e:
-            return JsonResponse({'error': 'Error al decodificar JSON: {}'.format(str(e))}, status=400)
-    else:
-        return JsonResponse({'error': 'Método no permitido'}, status=405)
-
 
 @login_required
 @is_data
@@ -52,6 +27,7 @@ def viewRequestAdmin(request):
         'objectData': objectsWithdrawalRequestReinventor,
     }
     return render(request, 'administrator/pages/ver_request.html', data)
+
 
 @login_required
 def addUserAdmin(request):
@@ -87,6 +63,7 @@ def addUserAdmin(request):
     }
     return render(request, 'administrator/pages/form_users.html', data)
 
+
 @login_required
 def editUserAdmin(request, id):
     object = get_object_or_404(User, id=id)
@@ -121,6 +98,7 @@ def editUserAdmin(request, id):
     }
     return render(request, 'administrator/pages/form_users.html', data)
 
+
 @login_required
 @is_data
 def viewUserAdmin(request):
@@ -130,6 +108,7 @@ def viewUserAdmin(request):
         'objectData': objectsUserReinventor,
     }
     return render(request, 'administrator/pages/ver_users.html', data)
+
 
 @login_required
 def configurationCompany(request):
@@ -155,6 +134,7 @@ def configurationCompany(request):
         'logo': logo
     }
     return render(request, 'administrator/pages/form_company.html', data)
+
 
 @login_required
 def addConfiguration(request):
@@ -577,8 +557,7 @@ def addObservations(request, wrr_id):
             frm.save()
 
             messages.success(request, 'Observación creada exitosamente!.')
-            return redirect('reinventa_app:edit-request-reinventor', wrr_id=wrr_id)
-            # return redirect('reinventa_app:edit-observations', wrr_id=wrr_id, rt_id=frm.rt_id)
+            return redirect('reinventa_app:edit-observations', wrr_id=wrr_id, rt_id=frm.rt_id)
         
         else:
             for field in form:
