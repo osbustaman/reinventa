@@ -29,6 +29,9 @@ Listado de Reinventores
     <li>
         <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:add-reinventor' %}')">Nuevo cliente <i class="fa fa-plus-circle"></i></button>
     </li>
+    <li>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">Carga masiva <i class="fa fa-plus-circle"></i></button>
+    </li>
 </ul>
 {% endblock %}
 
@@ -63,6 +66,25 @@ Listado de Reinventores
     </tbody>
 </table>
 
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Carga masiva reinventores</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Cargar excel (.xls, .xlsx)</h4>
+                <input type="file" name="file-excel" id="file-excel" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="download_file_excel()">Descargar plantilla</button>
+                <button type="button" class="btn btn-primary" onclick="upload_excel()">Subir Excel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     const redirectToUrl = (url) => {
@@ -83,6 +105,143 @@ Listado de Reinventores
             }
         });
     }
+
+
+    const upload_excel = () => {
+        const fileInput = document.getElementById('file-excel');
+        const file = fileInput.files[0];
+
+        const allowedExtensions = [".xls", ".xlsx"];
+        const extension = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+        let itIsAllowed = false;
+
+        for (let i = 0; i < allowedExtensions.length; i++) {
+            if (allowedExtensions[i] === extension) {
+                itIsAllowed = true;
+                break;
+            }
+        }
+
+        if (itIsAllowed) {
+            // Archivo con extensión permitida, proceder con la conversión a base64
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                const base64String = reader.result.split(',')[1];
+                // Enviar el archivo en base64 a un endpoint con fetch
+                enviarArchivo(base64String);
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            console.log('El archivo seleccionado no tiene una extensión válida.');
+        }
+    };
+
+    const enviarArchivo = (base64String) => {
+        // Aquí debes proporcionar la URL de tu endpoint
+
+        $.ajax({
+            url: '{% url 'reinventa_app:upload_file' %}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'file_data': base64String,
+            },
+            success: function(data) {
+                $.confirm({
+                    title: 'Confirmación',
+                    content: 'Archivo cargado correctamente, presione aceptar para ver los cambios.',
+                    buttons: {
+                        aceptar: function () {
+                            location.reload();
+                        }
+                    }
+                });
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    };
+
+    const download_file_excel = () => {
+        $.ajax({
+            url: '{% url 'reinventa_app:download_excel_for_upload_reinventor' %}',
+            type: 'POST',
+            dataType: 'json',
+            success: function(data) {
+                if (data && data.response.message) {
+                    // Llamada a la función para convertir y descargar el archivo Excel
+                    base64ToExcel(data.response.message, 'archivo_excel.xlsx');
+                } else {
+                    console.error('Error: No se recibió el base64 del servidor.');
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    };
+
+    // Función para convertir la cadena base64 a Excel y descargar el archivo
+    function base64ToExcel(base64Data, filename) {
+        // Decodificar la cadena base64
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+
+        // Crear un Blob con los datos decodificados
+        const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        // Crear un enlace para descargar el archivo
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = filename;
+
+        // Simular un clic en el enlace para iniciar la descarga
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
+
+    // $('#upload-excel').click(function() {
+    //     var file=$("#file-excel").val()
+
+    //     allowed_extensions = new Array(".xls", ".xlsx");
+    //     extensions = (file.substring(file.lastIndexOf("."))).toLowerCase();  
+    //     it_is_allowed = false; 
+    //     for (var i = 0; i < allowed_extensions.length; i++) { 
+    //         if (allowed_extensions[i] == extensions) { 
+    //             it_is_allowed = true; 
+    //             break; 
+    //         } 
+    //     }
+
+    //     console.log(it_is_allowed)
+
+
+        // $.ajax({
+        //     url: '{% url 'reinventa_app:new_observation' %}',
+        //     type: 'POST',
+        //     dataType: 'json',
+        //     data: {
+        //         'respuesta': respuesta,
+        //         'wrr_id': '{{ wrr_id }}'
+        //     },
+        //     success: function(data) {
+        //         location.reload();
+        //     },
+        //     error: function(error) {
+        //         console.error('Error:', error);
+        //     }
+        // });
+    // });
 
     
 </script>

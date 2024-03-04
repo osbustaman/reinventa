@@ -1,10 +1,20 @@
+import datetime
+import io
+import json
+import base64
+from openpyxl import Workbook
+import openpyxl
+from openpyxl.worksheet.datavalidation import DataValidation
+import pandas as pd
+from io import BytesIO
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
 
 from django.contrib.auth.models import User
-from applications.account.models import RequestTracking, WithdrawalRequestReinventor
+from applications.account.models import Comuna, Pais, Region, Reinventor, RequestTracking, WithdrawalRequestReinventor
 from applications.reinventor.forms import RequestTrackingForm
+from reinventa.utils import getLatitudeLongitude
 
 @csrf_exempt  
 def new_observation(request):
@@ -25,5 +35,153 @@ def new_observation(request):
         
         except json.JSONDecodeError as e:
             return JsonResponse({'error': 'Error al decodificar JSON: {}'.format(str(e))}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def download_excel_for_upload_reinventor(request):
+    if request.method == 'POST':
+        try:
+
+            reinventores = ['REINVENTOR', 'NOMBRE', 'EMAIL', 'DIRECCION', 'REGION', 'COMUNA']
+            locations = ['NOMBRE COMUNA', 'REGION COMUNA']
+
+            df_reinventores = pd.DataFrame(columns=reinventores)
+            df_comunnes = pd.DataFrame(columns=locations)
+
+            #Fecha actual
+            filename_excel ='plantilla_carga_masiva.xlsx'
+            writer = pd.ExcelWriter(f'{filename_excel}', engine='xlsxwriter')
+
+            df_reinventores.to_excel(writer, sheet_name='reinventores', index=False)
+            df_comunnes.to_excel(writer, sheet_name='comunas', index=False)
+
+            df_reinventores.columns = reinventores
+            df_comunnes.columns = locations
+
+            writer.save()
+
+            # Abre el archivo Excel existente
+            workbook = openpyxl.load_workbook(filename=filename_excel)
+
+            sheet_cc = workbook['comunas']
+            sheet = workbook['reinventores']
+
+            object_comunas = Comuna.objects.all()
+            cont = 2
+            for comunas in object_comunas:
+                sheet_cc[f'A{cont}'] = comunas.com_nombre
+                sheet_cc[f'B{cont}'] = comunas.region.re_nombre
+                cont += 1
+
+            # Oculta la hoja
+            # sheet_cc.sheet_state = 'hidden'
+            excel_base64 = ""
+
+                    # Crear una lista de opciones para la lista desplegable de regiones
+            object_region = Region.objects.all()
+            array_regiones = []
+            for region in object_region:
+                array_regiones.append(region.re_nombre)
+
+            validation_regiones = DataValidation(type="list", formula1=f'"{",".join(array_regiones)}"')
+            validation_regiones.add(f'E2:E50')
+            sheet.add_data_validation(validation_regiones)
+
+            # Guardamos el archivo con los cambios
+            workbook.save(filename_excel)
+
+            # Codifica el archivo en base64
+            with open(filename_excel, 'rb') as file:
+                excel_base64 = base64.b64encode(file.read()).decode('utf-8').replace('\n', '')
+
+            response = {
+                'message': excel_base64,
+                'error': False
+            }
+            response_data = {'response': response}
+            return JsonResponse(response_data)
+            
+        except Exception as e:
+            return JsonResponse({'error': 'Error al descargar el archivo Excel: {}'.format(str(e))}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+@csrf_exempt  
+def upload_file(request):
+    if request.method == 'POST':
+        try:
+            # Obtén la cadena base64 del cuerpo del request
+            file_data = request.POST.get("file_data", "")
+
+            # Decodifica la cadena base64
+            decoded_data = base64.b64decode(file_data)
+
+            # Leer el archivo Excel
+            excel_file = io.BytesIO(decoded_data)
+            df_excel = pd.read_excel(excel_file, sheet_name=None)
+            hojas_excel = df_excel.keys()
+
+
+            datos_por_hoja = {}
+            for hoja in hojas_excel:
+                # Lee los datos de la hoja actual
+                # skiprows omite la primera fila
+                df_hoja = pd.read_excel(excel_file, sheet_name=hoja, skiprows=0)
+
+                # Guarda los datos de la hoja actual en un array
+                datos_hoja = []
+                for index, row in df_hoja.iterrows():
+                    datos_hoja.append(row.to_dict())
+
+                # Agrega los datos de la hoja actual al diccionario
+                datos_por_hoja[hoja] = datos_hoja
+            
+            the_country = Pais.objects.filter(pa_id=1)
+            if not the_country.exists():
+                raise Exception('El país no existe, debe crearlo primero')
+            
+            for key, value in datos_por_hoja.items():
+                if key == 'reinventores':
+                    for reinventor in value:
+
+                        object_reinventor = Reinventor.objects.filter(re_email=reinventor['EMAIL'])
+
+                        if not object_reinventor.exists():
+
+                            address = f"{ reinventor['DIRECCION'] }, { reinventor['COMUNA'] }, { reinventor['REGION'] }, { the_country[0].pa_nombre }"
+                            lat_lng = getLatitudeLongitude(address)
+
+                            if not lat_lng:
+                                re_latitude = None
+                                re_longitude = None
+                            else:
+                                re_latitude = lat_lng['latitude'] 
+                                re_longitude = lat_lng['longitude']
+
+                            Reinventor.objects.create(
+                                re_nameentity = reinventor['REINVENTOR'],
+                                re_email = reinventor['EMAIL'],
+                                re_namereinventor = reinventor['NOMBRE'],
+                                re_address = reinventor['DIRECCION'],
+                                pais = the_country[0],
+                                region = Region.objects.get(re_nombre=reinventor['REGION']),
+                                comuna = Comuna.objects.get(com_nombre=reinventor['COMUNA']),
+                                re_latitude = re_latitude,
+                                re_longitude = re_longitude
+                            ).save() 
+                        
+
+
+            response = {
+                'message': 'success',
+                'error': False
+            }
+            response_data = {'response': response}
+            return JsonResponse(response_data)
+        
+        except Exception as e:
+            return JsonResponse({'error': 'Error al procesar el archivo Excel: {}'.format(str(e))}, status=400)
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)

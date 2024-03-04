@@ -179,6 +179,8 @@ class ReinventorForm(forms.ModelForm):
         attrs=tags_input_general), required=True)
     re_namereinventor = forms.CharField(label="Nombre representante", widget=forms.TextInput(
         attrs=tags_input_general), required=True)
+    re_email = forms.EmailField(label="mail", widget=forms.TextInput(
+        attrs=tags_input_general), required=True)
     re_address = forms.CharField(label="Dirección", widget=forms.TextInput(
         attrs=tags_input_general), help_text="ej: calle siempre viva 1010", required=True)
     pais = forms.ModelChoiceField(label="País", required=True,
@@ -198,6 +200,7 @@ class ReinventorForm(forms.ModelForm):
         fields = [
             're_nameentity',
             're_namereinventor',
+            're_email',
             're_address',
             'pais',
             'region',

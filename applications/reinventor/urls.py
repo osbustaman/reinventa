@@ -46,6 +46,8 @@ urlpatterns = [
 
     #ajax
     path('ajax/nueva-observacion/', views_ajax.new_observation, name='new_observation'),
+    path('ajax/upload-file/', views_ajax.upload_file, name='upload_file'),
+    path('ajax/download-excel-for-upload-reinventor/', views_ajax.download_excel_for_upload_reinventor, name='download_excel_for_upload_reinventor'),
 
 
     path('error404/', error404, name='error404'),
