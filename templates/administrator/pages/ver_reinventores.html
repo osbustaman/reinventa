@@ -111,6 +111,15 @@ Listado de Reinventores
         const fileInput = document.getElementById('file-excel');
         const file = fileInput.files[0];
 
+        // Verificar si se seleccionó un archivo
+        if (!file) {
+            $.alert({
+                title: 'Alerta!',
+                content: 'Debes seleccionar un archivo para continuar.',
+            });
+            return;
+        }
+
         const allowedExtensions = [".xls", ".xlsx"];
         const extension = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
         let itIsAllowed = false;
@@ -134,7 +143,11 @@ Listado de Reinventores
 
             reader.readAsDataURL(file);
         } else {
-            console.log('El archivo seleccionado no tiene una extensión válida.');
+            $.alert({
+                title: 'Alerta!',
+                content: 'El archivo seleccionado no tiene una extensión válida.',
+            });
+            return;
         }
     };
 
