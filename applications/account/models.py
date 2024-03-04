@@ -80,7 +80,7 @@ class Reinventor(TimeStampedModel):
 
     re_id = models.AutoField("Key", primary_key=True)
     re_nameentity = models.CharField("Nombre empresa", max_length=255)
-    re_email = models.CharField("Correo empresa", max_length=255)
+    # re_email = models.CharField("Correo empresa", max_length=255)
     re_namereinventor = models.CharField("Nombre completo persona a cargo", max_length=255)
     re_address = models.CharField("Dirección de la empresa", help_text="ej: calle siempre viva 1010", max_length=255)
     pais = models.ForeignKey(Pais, verbose_name="País",
