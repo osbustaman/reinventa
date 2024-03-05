@@ -154,8 +154,8 @@ def upload_file(request):
                             lat_lng = getLatitudeLongitude(address)
 
                             if not lat_lng:
-                                re_latitude = None
-                                re_longitude = None
+                                re_latitude = 0
+                                re_longitude = 0
                             else:
                                 re_latitude = lat_lng['latitude'] 
                                 re_longitude = lat_lng['longitude']
