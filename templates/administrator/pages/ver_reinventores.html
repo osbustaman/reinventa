@@ -106,7 +106,10 @@ Listado de Reinventores
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="download_file_excel()">Descargar plantilla</button>
-                <button type="button" class="btn btn-primary" onclick="upload_excel()">Subir Excel</button>
+                <button class="btn btn-primary" type="button" onclick="upload_excel()"> Subir Excel 
+                    <span class="spinner-border spinner-border-sm" id="loading-button" role="status" aria-hidden="true"></span>
+                    <span class="sr-only">Loading...</span>
+                </button>
             </div>
         </div>
     </div>
@@ -117,7 +120,9 @@ Listado de Reinventores
     $(document).ready(function() {
         var table = $('#datatable-responsive').DataTable( {
             responsive: true
-        } );
+        });
+
+        $("#loading-button").hide()
     });
 
     const redirectToUrl = (url) => {
@@ -186,6 +191,8 @@ Listado de Reinventores
 
     const enviarArchivo = (base64String) => {
         // Aquí debes proporcionar la URL de tu endpoint
+
+        $("#loading-button").show()
 
         $.ajax({
             url: '{% url 'reinventa_app:upload_file' %}',
