@@ -146,31 +146,36 @@ def upload_file(request):
                 if key == 'reinventores':
                     for reinventor in value:
 
-                        object_reinventor = Reinventor.objects.filter(re_email=reinventor['EMAIL'])
+                        try:
 
-                        if not object_reinventor.exists():
+                            object_reinventor = Reinventor.objects.filter(re_email=reinventor['EMAIL'])
 
-                            address = f"{ reinventor['DIRECCION'] }, { reinventor['COMUNA'] }, { reinventor['REGION'] }, { the_country[0].pa_nombre }"
-                            lat_lng = getLatitudeLongitude(address)
+                            if not object_reinventor.exists():
 
-                            if not lat_lng:
-                                re_latitude = 0
-                                re_longitude = 0
-                            else:
-                                re_latitude = lat_lng['latitude'] 
-                                re_longitude = lat_lng['longitude']
+                                address = f"{ reinventor['DIRECCION'] }, { reinventor['COMUNA'] }, { reinventor['REGION'] }, { the_country[0].pa_nombre }"
+                                lat_lng = getLatitudeLongitude(address)
 
-                            Reinventor.objects.create(
-                                re_nameentity = reinventor['REINVENTOR'],
-                                re_email = reinventor['EMAIL'],
-                                re_namereinventor = reinventor['NOMBRE'],
-                                re_address = reinventor['DIRECCION'],
-                                pais = the_country[0],
-                                region = Region.objects.get(re_nombre=reinventor['REGION']),
-                                comuna = Comuna.objects.get(com_nombre=reinventor['COMUNA']),
-                                re_latitude = re_latitude,
-                                re_longitude = re_longitude
-                            ).save() 
+                                if not lat_lng:
+                                    re_latitude = 0
+                                    re_longitude = 0
+                                else:
+                                    re_latitude = lat_lng['latitude'] 
+                                    re_longitude = lat_lng['longitude']
+
+                                Reinventor.objects.create(
+                                    re_nameentity = reinventor['REINVENTOR'],
+                                    re_email = reinventor['EMAIL'],
+                                    re_namereinventor = reinventor['NOMBRE'],
+                                    re_address = reinventor['DIRECCION'],
+                                    pais = the_country[0],
+                                    region = Region.objects.get(re_nombre=reinventor['REGION']),
+                                    comuna = Comuna.objects.get(com_nombre=reinventor['COMUNA']),
+                                    re_latitude = re_latitude,
+                                    re_longitude = re_longitude
+                                ).save() 
+                        except Exception as e:
+                            print(object_reinventor[0].re_email)
+                            
                         
 
 
