@@ -22,9 +22,6 @@ from reinventa.utils import getLatitudeLongitude
 @is_data
 def viewRequestAdmin(request):
     objectsWithdrawalRequestReinventor = WithdrawalRequestReinventor.objects.filter(wrr_active = "Y")
-
-    print(objectsWithdrawalRequestReinventor)
-
     data = {
         'objectData': objectsWithdrawalRequestReinventor,
     }

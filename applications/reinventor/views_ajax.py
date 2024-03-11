@@ -142,43 +142,35 @@ def upload_file(request):
             if not the_country.exists():
                 raise Exception('El país no existe, debe crearlo primero')
             
-            for key, value in datos_por_hoja.items():
-                if key == 'reinventores':
-                    for reinventor in value:
+            for value in datos_por_hoja["reinventores"]:
 
-                        try:
+                object_reinventor = Reinventor.objects.filter(re_email=value['EMAIL']).exists()
+                
+                if not object_reinventor:
+                    address = f"{ value['DIRECCION'] }, { value['COMUNA'] }, { value['REGION'] }, { the_country[0].pa_nombre }"
+                    lat_lng = getLatitudeLongitude(address)
 
-                            object_reinventor = Reinventor.objects.filter(re_email=reinventor['EMAIL'])
+                    if not lat_lng:
+                        re_latitude = 0
+                        re_longitude = 0
+                    else:
+                        re_latitude = lat_lng['latitude'] 
+                        re_longitude = lat_lng['longitude']
 
-                            if not object_reinventor.exists():
-
-                                address = f"{ reinventor['DIRECCION'] }, { reinventor['COMUNA'] }, { reinventor['REGION'] }, { the_country[0].pa_nombre }"
-                                lat_lng = getLatitudeLongitude(address)
-
-                                if not lat_lng:
-                                    re_latitude = 0
-                                    re_longitude = 0
-                                else:
-                                    re_latitude = lat_lng['latitude'] 
-                                    re_longitude = lat_lng['longitude']
-
-                                Reinventor.objects.create(
-                                    re_nameentity = reinventor['REINVENTOR'],
-                                    re_email = reinventor['EMAIL'],
-                                    re_namereinventor = reinventor['NOMBRE'],
-                                    re_address = reinventor['DIRECCION'],
-                                    pais = the_country[0],
-                                    region = Region.objects.get(re_nombre=reinventor['REGION']),
-                                    comuna = Comuna.objects.get(com_nombre=reinventor['COMUNA']),
-                                    re_latitude = re_latitude,
-                                    re_longitude = re_longitude
-                                ).save() 
-                        except Exception as e:
-                            print(object_reinventor[0].re_email)
+                    Reinventor.objects.create(
+                        re_nameentity = value['REINVENTOR'],
+                        re_email = value['EMAIL'],
+                        re_namereinventor = value['NOMBRE'],
+                        re_address = value['DIRECCION'],
+                        pais = the_country[0],
+                        region = Region.objects.get(re_nombre=value['REGION']),
+                        comuna = Comuna.objects.get(com_nombre=value['COMUNA']),
+                        re_latitude = re_latitude,
+                        re_longitude = re_longitude
+                    ).save() 
+            
+        
                             
-                        
-
-
             response = {
                 'message': 'success',
                 'error': False
