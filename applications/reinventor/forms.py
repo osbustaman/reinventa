@@ -27,7 +27,7 @@ class UserForm(forms.ModelForm):
     }
 
     username = forms.CharField(label="Usuario",
-                               widget=forms.TextInput(attrs=tags_input_general), help_text="debe ser el rut", required=True)
+                               widget=forms.TextInput(attrs=tags_input_general), help_text="el usuario debe ser el rut", required=True)
     first_name = forms.CharField(label="Nombres",
                                  widget=forms.TextInput(attrs=tags_input_general), required=True)
     last_name = forms.CharField(label="Apellidos",

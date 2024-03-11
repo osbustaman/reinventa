@@ -119,8 +119,11 @@ def configurationCompany(request):
         form = CompanyForm(instance=objCompany)
         acction = 'editar'
         co_id = objCompany.co_id
-        logo = objCompany.co_logo
-        request.session['logo_company'] = logo.url
+        logo = objCompany.co_logo if objCompany.co_logo else "../media/site/default_image.jpg"
+        try:
+            request.session['logo_company'] = logo.url
+        except:
+            request.session['logo_company'] = ""
     else:
         form = CompanyForm()
         acction = 'crear'
@@ -153,17 +156,18 @@ def addConfiguration(request):
             address = f"{ frm.co_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
             lat_lng = getLatitudeLongitude(address)
 
+            frm.save()
+
+            msg = ""
             if not lat_lng:
-                messages.error(request, "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente")
-                return redirect('reinventa_app:configuracion')
+                msg = "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente"
+            else:
+                frm.co_latitude = lat_lng['latitude']
+                frm.co_longitude = lat_lng['longitude']
+                frm.save()
 
-            frm.save()
             
-            frm.co_latitude = lat_lng['latitude']
-            frm.co_longitude = lat_lng['longitude']
-            frm.save()
-
-            messages.success(request, 'Configuración creada exitosamente!.')
+            messages.success(request, f'Configuración creada exitosamente!. {msg}')
             return redirect('reinventa_app:configuracion')
         
         else:
@@ -191,13 +195,13 @@ def editConfiguration(request, co_id):
             address = f"{ frm.co_address }, { frm.comuna.com_nombre }, { frm.region.re_nombre }, { frm.pais.pa_nombre }"
             lat_lng = getLatitudeLongitude(address)
 
+            msg = ""
             if not lat_lng:
-                messages.error(request, "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente")
-                return redirect('reinventa_app:configuracion')
-            
-            frm.co_latitude = lat_lng['latitude']
-            frm.co_longitude = lat_lng['longitude']
-            frm.save()
+                msg = "La ubicación no pudo ser detectada, ingrese la latitud y longitud manualmente"
+            else:
+                frm.co_latitude = lat_lng['latitude']
+                frm.co_longitude = lat_lng['longitude']
+                frm.save()
 
             request.session['logo_company'] = f"media/{frm.co_logo.name}"
 

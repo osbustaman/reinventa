@@ -42,155 +42,195 @@
 <ul class="nav navbar-right panel_toolbox">
     <li>
 
-        {% if action == 'Crear' %}
-        <button type="submit" class="btn btn-info btn-sm" form="form">{{ action }} Solicitud <i class="fa fa-floppy-o"></i></button>
-        {% endif %}
-
-        <button type="button" class="btn btn-info btn-sm"
-                onclick="redirectToUrl('{{ linkBack }}')">Volver <i
-                    class="fa fa-arrow-left"></i></button>
+        
     </li>
 </ul>
 {% endblock %}
 
 {% block content_page %}
 
-<ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Solicitud</a>
-    </li>
-    {% if action == 'Editar' %}
-    <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Seguimiento</a>
-    </li>
-    {% endif %}
-</ul>
-
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <form method="post" id="form" action="" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="{{ form.wrr_date.id_for_label }}">{{ form.wrr_date.label }}</label>
-                        <div class='input-group date'>
-                            {{ form.wrr_date }}
-                            <span class="input-group-addon">
-                                <span class="fa fa-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label for="{{ form.wrr_quantityliters.id_for_label }}">{{ form.wrr_quantityliters.label }}</label>
-                        {{ form.wrr_quantityliters }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="{{ form.wrr_estaterequest.id_for_label }}">{{ form.wrr_estaterequest.label }}</label>
-                        {{ form.wrr_estaterequest }}
-                    </div>
-                </div>
-
-                
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Reinventores / {{ action }} Cliente</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 form-group pull-right top_search">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        
+                    </li>
+                </ul>
             </div>
-        </form>
+        </div>
     </div>
-    {% if action == 'Editar' %}
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        <div class="x_content">
-            <ul class="list-unstyled timeline" style="overflow: scroll; max-height: 400px;">
-    
-                {% for object in objectsObservations %}
-    
-                <li>
-                    <div class="block">
-                        <div class="tags">
-                            <a href="" class="tag" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ object.user.email }}">
-                                <span>{{ object.user.email }}</span>
-                            </a>
-                        </div>
-                        <div class="block_content">
-                            <h2 class="title">
-                                <a>{{ object.user.first_name | upper }} {{ object.user.last_name | upper }}</a>
-                            </h2>
-                            <div class="byline">
-                                <span>{{ object.created|date:"Y/m/d H:i:s" }}</span>
+    <div class="clearfix"></div>
+    <div class="">
+        <div class="col-md-8 col-sm-8">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-building-o"></i> <small>Configuración cliente</small></h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="x_content">
+                        <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Solicitud</a>
+                            </li>
+                            {% if action == 'Editar' %}
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Seguimiento</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <form method="post" id="form" action="" enctype="multipart/form-data">
+                                    {% csrf_token %}
+            
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.wrr_date.id_for_label }}">{{ form.wrr_date.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.wrr_date }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.wrr_quantityliters.id_for_label }}">{{ form.wrr_quantityliters.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.wrr_quantityliters }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.wrr_estaterequest.id_for_label }}">{{ form.wrr_estaterequest.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.wrr_estaterequest }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ln_solid"></div>
+
+                                    <div class="item form-group">
+                                        <div class="col-md-12 col-sm-12 offset-md-3">
+
+                                            {% if action == 'Crear' %}
+                                            <button type="submit" class="btn btn-success" form="form">{{ action }} Solicitud <i class="fa fa-floppy-o"></i></button>
+                                            {% endif %}
+
+                                            <button type="button" class="btn btn-info"
+                                                    onclick="redirectToUrl('{{ linkBack }}')">Volver <i
+                                                        class="fa fa-arrow-left"></i></button>
+                                                                            </div>
+                                                                        </div>
+
+
+                                </form>
+
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger mt-4" role="alert">
+                                {% else %}
+                                <div class="alert alert-success mt-4" role="alert">
+                                {% endif %}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <i class="icon ion-ios-{% if message.tags == 'error' %}close{% else %}checkmark{% endif %} alert-icon tx-32 mg-t-5 mg-xs-t-0"></i>
+                                        <span><strong>{% if message.tags == 'error' %}Error{% else %}Éxito{% endif %}: </strong> {{ message }}</span>
+                                    </div><!-- d-flex -->
+                                </div><!-- alert -->
+                                {% endfor %}
+                                {% endif %}
+            
                             </div>
-                            <p class="excerpt">{{ object.rt_observation|safe }}</p>
+                            {% if action == 'Editar' %}
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="x_content">
+                                    <ul class="list-unstyled timeline" style="overflow: scroll; max-height: 400px;">
                             
-                            {% if forloop.last %}
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">Observación</button>
+                                        {% for object in objectsObservations %}
+                            
+                                        <li>
+                                            <div class="block">
+                                                <div class="tags">
+                                                    <a href="" class="tag" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ object.user.email }}">
+                                                        <span>{{ object.user.email }}</span>
+                                                    </a>
+                                                </div>
+                                                <div class="block_content">
+                                                    <h2 class="title">
+                                                        <a>{{ object.user.first_name | upper }} {{ object.user.last_name | upper }}</a>
+                                                    </h2>
+                                                    <div class="byline">
+                                                        <span>{{ object.created|date:"Y/m/d H:i:s" }}</span>
+                                                    </div>
+                                                    <p class="excerpt">{{ object.rt_observation|safe }}</p>
+                                                    
+                                                    {% if forloop.last %}
+                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">Observación</button>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </li>
+                        
+                                        {% endfor %}
+
+                                    </ul>
+
+                                    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                            
+                                                <form method="post" id="form-observation" enctype="multipart/form-data"></form>
+                                                {% csrf_token %}
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="myModalLabel">Respuesta</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h4></h4>
+                                                        
+                                                        <div class="form-row">
+                                                            <div class="form-group col-12">
+                                                                {{ form.rt_observation }}
+                                                            </div>        
+                                                        </div>
+                                                        <textarea name="respuesta" id="respuesta" cols="30" rows="10" class="form-control"></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                        <button type="button" id="save-response" class="btn btn-primary">Guardar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                </div>
+                            </div>
                             {% endif %}
                         </div>
                     </div>
-                </li>
-
-                {% endfor %}
-
-    
-            </ul>
-        </div>
-        
-
-        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-
-                    <form method="post" id="form-observation" enctype="multipart/form-data"></form>
-                    {% csrf_token %}
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel">Respuesta</h4>
-                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <h4></h4>
-                            
-                            <div class="form-row">
-                                <div class="form-group col-12">
-                                    {{ form.rt_observation }}
-                                </div>        
-                            </div>
-                            <textarea name="respuesta" id="respuesta" cols="30" rows="10" class="form-control"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="button" id="save-response" class="btn btn-primary">Guardar</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
-
     </div>
-
-    {% endif %}
 </div>
-
-
-
-{% if messages %}
-{% for message in messages %}
-{% if message.tags == 'error' %}
-<div class="alert alert-danger mt-4" role="alert">
-{% else %}
-<div class="alert alert-success mt-4" role="alert">
-{% endif %}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    <div class="d-flex align-items-center justify-content-start">
-        <i class="icon ion-ios-{% if message.tags == 'error' %}close{% else %}checkmark{% endif %} alert-icon tx-32 mg-t-5 mg-xs-t-0"></i>
-        <span><strong>{% if message.tags == 'error' %}Error{% else %}Éxito{% endif %}: </strong> {{ message }}</span>
-    </div><!-- d-flex -->
-</div><!-- alert -->
-{% endfor %}
-{% endif %}
 
 <script>
 

@@ -25,62 +25,89 @@ Listado de Solicitudes
 {% endblock %}
 
 {% block menu_action %}
-<ul class="nav navbar-right panel_toolbox">
-    <li>
-        <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:crear-request-reinventor' %}')">Nueva solicitud <i class="fa fa-plus-circle"></i></button>
-    </li>
-</ul>
+
 {% endblock %}
 
 {% block content_page %}
-<table id="datatable" class="table table-striped table-bordered datatable" style="width:100%">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Usuario</th>
-            <th>Fecha del retiro</th>
-            <th>Listros de aceite</th>
-            <th>Estado de la solicitud</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for object in objects %}
-        <tr>
-            <td>{{ object.wrr_id }}</td>
-            <td>{{ object.user.first_name | upper }} {{ object.user.last_name | upper }}</td>
-            <td>{{ object.wrr_date }}</td>
-            <td>{{ object.wrr_quantityliters }}</td>
-            <td>{{ object.get_wrr_estaterequest_display }}</td>
-            <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-request-reinventor' object.wrr_id %}')">Ver Solicitud</button></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Reinventa / Solicitudes</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 form-group pull-right top_search">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:crear-request-reinventor' %}')">Nueva solicitud <i class="fa fa-plus-circle"></i></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="">
+        <div class="col-md-12 col-sm-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-list-ul"></i> <small>Listado de solicitudes</small></h2>
 
-
-<script>
-    const redirectToUrl = (url) => {
-        location.href = url;
-    }
-
-    const deleteClient = (url) => {
-        $.confirm({
-            title: 'Confirmación',
-            content: 'Esta eguro de eliminar al reinventor?, para eliminar haga clic confirmar, de lo contrario cancelar',
-            buttons: {
-                confirmar: function () {
-                    location.href = url;
-                },
-                cancelar: function () {
-                    $.alert('Operación cancelada');
-                },
-            }
-        });
-    }
-
-    
-</script>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table id="datatable" class="table table-striped table-bordered datatable" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Usuario</th>
+                                <th>Fecha del retiro</th>
+                                <th>Listros de aceite</th>
+                                <th>Estado de la solicitud</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for object in objects %}
+                            <tr>
+                                <td>{{ object.wrr_id }}</td>
+                                <td>{{ object.user.first_name | upper }} {{ object.user.last_name | upper }}</td>
+                                <td>{{ object.wrr_date }}</td>
+                                <td>{{ object.wrr_quantityliters }}</td>
+                                <td>{{ object.get_wrr_estaterequest_display }}</td>
+                                <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-request-reinventor' object.wrr_id %}')">Ver Solicitud</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    
+                    <script>
+                        const redirectToUrl = (url) => {
+                            location.href = url;
+                        }
+                    
+                        const deleteClient = (url) => {
+                            $.confirm({
+                                title: 'Confirmación',
+                                content: 'Esta eguro de eliminar al reinventor?, para eliminar haga clic confirmar, de lo contrario cancelar',
+                                buttons: {
+                                    confirmar: function () {
+                                        location.href = url;
+                                    },
+                                    cancelar: function () {
+                                        $.alert('Operación cancelada');
+                                    },
+                                }
+                            });
+                        }
+                    
+                        
+                    </script>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 

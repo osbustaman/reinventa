@@ -34,7 +34,15 @@
 
     <link href="{% statics_tag 'build/css/override.css' %}" rel="stylesheet">
     
+    <style>
+        .title_left{
+            padding-left: 10px;
+        }
 
+        .select2 .select2-container .select2-container--default .select2-container--focus{
+            width: 358px;
+        }
+    </style>
     {% block static_up %}
     {% endblock %}
 </head>
@@ -163,28 +171,7 @@
             <!-- page content -->
             <div class="right_col" role="main">
                 <div class="">
-                    <div class="page-title">
-                        <div class="title_left">
-                            <h3>{% block title_page %}Plain Page{% endblock %}</h3>
-                        </div>
-
-                        <div class="clearfix"></div>
-
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12  ">
-                                <div class="x_panel">
-                                    <div class="x_title">
-                                        <h2>{% block sub_title_page %}Plain Page{% endblock %}</h2>
-                                        {% block menu_action %}Plain Page{% endblock %}
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="x_content">
-                                        {% block content_page %}content_page{% endblock %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% block content_page %}content_page{% endblock %}
                 </div>
             </div>
             <!-- /page content -->

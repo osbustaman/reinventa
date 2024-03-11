@@ -41,7 +41,7 @@
                 class="fa fa-clipboard"></i></button>
 
         <button type="button" class="btn btn-info btn-sm"
-                onclick="redirectToUrl('{% url 'reinventa_app:add-user-reinventor' re_id %}')">Crear Usuario Reinventor <i
+                onclick="redirectToUrl('{% url 'reinventa_app:add-user-reinventor' re_id %}')">Crear Usuario Reinventa <i
                     class="fa fa-user"></i></button>
         {% endif %}
 
@@ -54,152 +54,256 @@
 
 {% block content_page %}
 
-<ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
-    <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Datos Reinventor</a>
-    </li>
-    {% if action == 'Editar' %}
-    <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Usuarios Reinventor</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected="false">Logo Reinventor</a>
-    </li>
-    {% endif %}
-</ul>
 
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <form method="post" id="form" action="" enctype="multipart/form-data">
-            {% csrf_token %}
-        
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="{{ form.re_nameentity.id_for_label }}">{{ form.re_nameentity.label }}</label>
-                        {{ form.re_nameentity }}
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="{{ form.re_namereinventor.id_for_label }}">{{ form.re_namereinventor.label }}</label>
-                        {{ form.re_namereinventor }}
-                    </div>
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Reinventores / {{ action }} Cliente</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 form-group pull-right top_search">
+                <ul class="nav navbar-right panel_toolbox">
+                    <li>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="">
+        <div class="col-md-8 col-sm-8">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-building-o"></i> <small>Configuración cliente</small></h2>
 
-                    <div class="form-group">
-                        <label for="{{ form.re_email.id_for_label }}">{{ form.re_email.label }}</label>
-                        {{ form.re_email }}
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="{{ form.re_address.id_for_label }}">{{ form.re_address.label }}</label>
-                        {{ form.re_address }}
-                    </div>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="{{ form.pais.id_for_label }}">{{ form.pais.label }}</label>
-                        {{ form.pais }}
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="{{ form.region.id_for_label }}">{{ form.region.label }}</label>
-                        {{ form.region }}
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="{{ form.comuna.id_for_label }}">{{ form.comuna.label }}</label>
-                        {{ form.comuna }}
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="{{ form.re_latitude.id_for_label }}">{{ form.re_latitude.label }}</label>
-                        {{ form.re_latitude }}
-                    </div>
-        
-                    <div class="form-group">
-                        <label for="{{ form.re_longitude.id_for_label }}">{{ form.re_longitude.label }}</label>
-                        {{ form.re_longitude }}
+                <div class="x_content">
+                    <div class="x_content">
+                        <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Datos Cliente</a>
+                            </li>
+                            {% if action == 'Editar' %}
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Usuarios Cliente</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Logo Cliente</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <form method="post" id="form" action="" enctype="multipart/form-data">
+                                    {% csrf_token %}
+            
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.re_nameentity.id_for_label }}">{{ form.re_nameentity.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.re_nameentity }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.re_namereinventor.id_for_label }}">{{ form.re_namereinventor.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.re_namereinventor }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.re_email.id_for_label }}">{{ form.re_email.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.re_email }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.re_address.id_for_label }}">{{ form.re_address.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.re_address }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.pais.id_for_label }}">{{ form.pais.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.pais }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.region.id_for_label }}">{{ form.region.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.region }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.comuna.id_for_label }}">{{ form.comuna.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.comuna }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.re_latitude.id_for_label }}">{{ form.re_latitude.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.re_latitude }}
+                                        </div>
+                                    </div>
+
+                                    <div class="item form-group">
+                                        <label class="col-form-label col-md-3 col-sm-3 label-align"
+                                            for="{{ form.re_longitude.id_for_label }}">{{ form.re_longitude.label }}
+                                            <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 ">
+                                            {{ form.re_longitude }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ln_solid"></div>
+
+                                    <div class="item form-group">
+                                        <div class="col-md-12 col-sm-12 offset-md-3">
+
+                                            <button type="submit" class="btn btn-success" form="form">{{ action }} Cliente <i class="fa fa-floppy-o"></i></button>
+
+                                            {% if action == 'Editar' %}
+                    
+                                            <button type="button" class="btn btn-info"
+                                                onclick="redirectToUrl('{% url 'reinventa_app:add-reinventor' %}')"> Crear Otro Reinventor <i
+                                                    class="fa fa-clipboard"></i></button>
+                                    
+                                            <button type="button" class="btn btn-info"
+                                                    onclick="redirectToUrl('{% url 'reinventa_app:add-user-reinventor' re_id %}')">Crear Usuario Reinventa <i
+                                                        class="fa fa-user"></i></button>
+                                            {% endif %}
+
+                                            <button type="button" class="btn btn-info"
+                                                                    onclick="redirectToUrl('{% url 'reinventa_app:ver-reinventores' %}')">Volver <i
+                                                                        class="fa fa-arrow-left"></i></button>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger mt-4" role="alert">
+                                {% else %}
+                                <div class="alert alert-success mt-4" role="alert">
+                                {% endif %}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <i class="icon ion-ios-{% if message.tags == 'error' %}close{% else %}checkmark{% endif %} alert-icon tx-32 mg-t-5 mg-xs-t-0"></i>
+                                        <span><strong>{% if message.tags == 'error' %}Error{% else %}Éxito{% endif %}: </strong> {{ message }}</span>
+                                    </div><!-- d-flex -->
+                                </div><!-- alert -->
+                                {% endfor %}
+                                {% endif %}
+            
+                            </div>
+                            {% if action == 'Editar' %}
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <table id="datatable-responsive" class="table table-striped table-bordered datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Usuario</th>
+                                            <th>Nombres</th>
+                                            <th>Apellidos</th>
+                                            <th>Correo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for object in objectsUserReinventors %}
+                                        <tr>
+                                            <td>{{ object.user.id }}</td>
+                                            <td>{{ object.user.username }}</td>
+                                            <td>{{ object.user.first_name }}</td>
+                                            <td>{{ object.user.last_name }}</td>
+                                            <td>{{ object.user.email }}</td>
+                                            <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-user-reinventor' re_id object.user.id %}')">Editar</button><button type="button"
+                                                    class="btn btn-danger btn-sm" onclick="deleteClient('{% url 'reinventa_app:delete-user-reinventor' re_id object.user.id %}')">Eliminar</button></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                <form method="post" action="{% url 'reinventa_app:logo-reinventor' re_id %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                        
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="{{ formLogo.re_logo.id_for_label }}">{{ formLogo.re_logo.label }}</label>
+                                            {{ formLogo.re_logo }}
+                                        </div>
+                        
+                                        <button type="submit" class="btn btn-dark">Subir Logo Empresa</button>
+                                    </div>
+                                    <div class="col-md-12 pt-4">
+                                        <img src="{{ logo }}" class="rounded float-left img-thumbnail">
+                                    </div>
+                        
+                                </form>
+                            </div>
+                            {% endif %}
+             
+                        </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
-    {% if action == 'Editar' %}
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        <table id="datatable" class="table table-striped table-bordered datatable" style="width:100%">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Usuario</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Correo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for object in objectsUserReinventors %}
-                <tr>
-                    <td>{{ object.user.id }}</td>
-                    <td>{{ object.user.username }}</td>
-                    <td>{{ object.user.first_name }}</td>
-                    <td>{{ object.user.last_name }}</td>
-                    <td>{{ object.user.email }}</td>
-                    <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-user-reinventor' re_id object.user.id %}')">Editar</button><button type="button"
-                            class="btn btn-danger btn-sm" onclick="deleteClient('{% url 'reinventa_app:delete-user-reinventor' re_id object.user.id %}')">Eliminar</button></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-    </div>
-    <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
-        <form method="post" action="{% url 'reinventa_app:logo-reinventor' re_id %}" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="{{ formLogo.re_logo.id_for_label }}">{{ formLogo.re_logo.label }}</label>
-                    {{ formLogo.re_logo }}
-                </div>
-
-                <button type="submit" class="btn btn-dark">Subir Logo Empresa</button>
-            </div>
-            <div class="col-md-12 pt-4">
-                <img src="{{ logo }}" class="rounded float-left img-thumbnail">
-            </div>
-
-        </form>
-    </div>
-    {% endif %}
 </div>
-
-
-
-{% if messages %}
-{% for message in messages %}
-{% if message.tags == 'error' %}
-<div class="alert alert-danger mt-4" role="alert">
-{% else %}
-<div class="alert alert-success mt-4" role="alert">
-{% endif %}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    <div class="d-flex align-items-center justify-content-start">
-        <i class="icon ion-ios-{% if message.tags == 'error' %}close{% else %}checkmark{% endif %} alert-icon tx-32 mg-t-5 mg-xs-t-0"></i>
-        <span><strong>{% if message.tags == 'error' %}Error{% else %}Éxito{% endif %}: </strong> {{ message }}</span>
-    </div><!-- d-flex -->
-</div><!-- alert -->
-{% endfor %}
-{% endif %}
 
 <script>
 
     $(document).ready(function() {
         $('.select2-show-search').select2();
     });
+
+    $(document).ready(function() {
+        var table = $('#datatable-responsive').DataTable( {
+            responsive: true
+        } );
+    } );
+
+
     const redirectToUrl = (url) => {
         location.href = url;
     }

@@ -18,98 +18,130 @@
 
 {% endblock %}
 
-{% block menu_action %}
-{% if request.session.objectCompany.ur_typeuser == 1 %}
-<div class="row">
-    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
-        <div class="tile-stats">
-            <div class="icon">
-                <i class="fa fa-envelope-square"></i>
-            </div>
-            <div class="count">0</div>
-            <p>Solicitudes pendientes.</p>
-        </div>
-    </div>
-
-    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
-        <div class="tile-stats">
-            <div class="icon">
-                <i class="fa fa-eye"></i>
-            </div>
-            <div class="count">0</div>
-            <p>Visto por Reinventa.</p>
-        </div>
-    </div>
-
-    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
-        <div class="tile-stats">
-            <div class="icon">
-                <i class="fa fa-truck"></i>
-            </div>
-            <div class="count">0</div>
-            <p>Reinventa en ruta.</p>
-        </div>
-    </div>
-
-    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
-        <div class="tile-stats">
-            <div class="icon">
-                <i class="fa fa-thumbs-up"></i>
-            </div>
-            <div class="count">0</div>
-            <p>Retirado por Reinventa.</p>
-        </div>
-    </div>
-
-    <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
-        <div class="tile-stats">
-            <div class="icon">
-                <i class="fa fa-angellist"></i>
-            </div>
-            <div class="count">{{ cantReinventors }}</div>
-            <p>Total de Reinventores.</p>
-        </div>
-    </div>
-    
-</div>
-{% endif %}
-{% endblock %}
-
 {% block content_page %}
-<div id="map" style="height: 400px;"></div>
 
-<script>
-    const crate_json = {
-        "startLatitude": {{ request.session.lat_lng.co_latitude }},
-        "startLongitude": {{ request.session.lat_lng.co_longitude }}
-    }
 
-    const locations = [
-        {% for reinventor in lstReinventrs %}
-            { latitude: {{ reinventor.re_latitude }}, longitude: {{ reinventor.re_longitude }}, name: '{{ reinventor.re_nameentity }}' },
-        {% endfor %}
-    ];
 
-    const accessToken = "pk.eyJ1Ijoib3NidXN0YW1hbiIsImEiOiJjbGpyamw4Y2IwZHNjM2VrY256bjF4a3J3In0.BREjlIuXom4d7eS_riSSNQ";
-    // Inicializar el mapa
-    var map = L.map('map').setView([crate_json['startLatitude'], crate_json['startLongitude']], 11);
 
-    // Agregar el mapa base (utilizando Mapbox)
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
-        maxZoom: 25,
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1
-    }).addTo(map);
 
-    // Agregar marcadores para las ubicaciones
-    locations.forEach(location => {
-        L.marker([location.latitude, location.longitude]).addTo(map)
-            .bindPopup(location.name)
-            .openPopup();
-    });
-</script>
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Inicio / Mapa</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 form-group pull-right top_search">
+                <div class="input-group">
 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="">
+        <div class="col-md-12 col-sm-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-map-marker"></i> <small>En este mapa se puede ver la ubicación de los clientes
+                            seleccionado</small></h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <div class="row">
+                        <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon">
+                                    <i class="fa fa-envelope-square"></i>
+                                </div>
+                                <div class="count">0</div>
+                                <p>Solicitudes pendientes.</p>
+                            </div>
+                        </div>
+
+                        <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon">
+                                    <i class="fa fa-eye"></i>
+                                </div>
+                                <div class="count">0</div>
+                                <p>Visto por Reinventa.</p>
+                            </div>
+                        </div>
+
+                        <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon">
+                                    <i class="fa fa-truck"></i>
+                                </div>
+                                <div class="count">0</div>
+                                <p>Reinventa en ruta.</p>
+                            </div>
+                        </div>
+
+                        <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon">
+                                    <i class="fa fa-thumbs-up"></i>
+                                </div>
+                                <div class="count">0</div>
+                                <p>Retirado por Reinventa.</p>
+                            </div>
+                        </div>
+
+                        <div class="animated flipInY col-lg-2 col-md-2 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon">
+                                    <i class="fa fa-angellist"></i>
+                                </div>
+                                <div class="count">{{ cantReinventors }}</div>
+                                <p>Total de Reinventores.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div id="map" style="height: 400px;"></div>
+
+                    <script>
+                        const crate_json = {
+                            "startLatitude": {{ request.session.lat_lng.co_latitude }},
+                        "startLongitude": {{ request.session.lat_lng.co_longitude }}
+                        }
+
+                        const locations = [
+                            {% for reinventor in lstReinventrs %}
+                        { latitude: {{ reinventor.re_latitude }}, longitude: {{ reinventor.re_longitude }}, name: '{{ reinventor.re_nameentity }}' },
+                        {% endfor %}
+                        ];
+
+                        const accessToken = "pk.eyJ1Ijoib3NidXN0YW1hbiIsImEiOiJjbGpyamw4Y2IwZHNjM2VrY256bjF4a3J3In0.BREjlIuXom4d7eS_riSSNQ";
+                        // Inicializar el mapa
+                        var map = L.map('map').setView([crate_json['startLatitude'], crate_json['startLongitude']], 11);
+
+                        // Agregar el mapa base (utilizando Mapbox)
+                        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + accessToken, {
+                            maxZoom: 25,
+                            id: 'mapbox/streets-v11',
+                            tileSize: 512,
+                            zoomOffset: -1
+                        }).addTo(map);
+
+                        // Agregar marcadores para las ubicaciones
+                        locations.forEach(location => {
+                            L.marker([location.latitude, location.longitude]).addTo(map)
+                                .bindPopup(location.name)
+                                .openPopup();
+                        });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block static_down %}
