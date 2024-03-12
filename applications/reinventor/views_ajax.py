@@ -2,6 +2,7 @@ import datetime
 import io
 import json
 import base64
+from numpy import isnan
 from openpyxl import Workbook
 import openpyxl
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -112,6 +113,9 @@ def download_excel_for_upload_reinventor(request):
 def upload_file(request):
     if request.method == 'POST':
         try:
+
+            not_save = []
+
             # Obtén la cadena base64 del cuerpo del request
             file_data = request.POST.get("file_data", "")
 
@@ -142,38 +146,59 @@ def upload_file(request):
             if not the_country.exists():
                 raise Exception('El país no existe, debe crearlo primero')
             
+            
+
             for value in datos_por_hoja["reinventores"]:
 
-                object_reinventor = Reinventor.objects.filter(re_email=value['EMAIL']).exists()
-                
-                if not object_reinventor:
-                    address = f"{ value['DIRECCION'] }, { value['COMUNA'] }, { value['REGION'] }, { the_country[0].pa_nombre }"
-                    lat_lng = getLatitudeLongitude(address)
+                if any(pd.isna(value[col]) for col in ['REINVENTOR', 'NOMBRE', 'DIRECCION', 'REGION', 'COMUNA', 'EMAIL']):
+                    not_save.append({
+                        "cliente": str(value["REINVENTOR"]),
+                        "nombre_a_cargo": str(value["NOMBRE"]),
+                        "direccion": str(value["DIRECCION"]),
+                        "region": str(value["REGION"]),
+                        "comuna": str(value["COMUNA"]),
+                        "email": str(value["EMAIL"]),
+                        "error": "faltan campos",
+                    })
+                else:
 
-                    if not lat_lng:
-                        re_latitude = 0
-                        re_longitude = 0
+                    object_reinventor = Reinventor.objects.filter(re_email=value['EMAIL']).exists()
+                    
+                    if not object_reinventor:
+
+                        address = f"{ value['DIRECCION'] }, { value['COMUNA'] }, { value['REGION'] }, { the_country[0].pa_nombre }"
+                        lat_lng = getLatitudeLongitude(address)
+
+                        if not lat_lng:
+                            re_latitude = 0
+                            re_longitude = 0
+                        else:
+                            re_latitude = lat_lng['latitude'] 
+                            re_longitude = lat_lng['longitude']
+
+                        Reinventor.objects.create(
+                            re_nameentity = value['REINVENTOR'],
+                            re_email = value['EMAIL'],
+                            re_namereinventor = value['NOMBRE'],
+                            re_address = value['DIRECCION'],
+                            pais = the_country[0],
+                            region = Region.objects.get(re_nombre=value['REGION']),
+                            comuna = Comuna.objects.get(com_nombre=value['COMUNA']),
+                            re_latitude = re_latitude,
+                            re_longitude = re_longitude
+                        )
+                    
                     else:
-                        re_latitude = lat_lng['latitude'] 
-                        re_longitude = lat_lng['longitude']
+                        not_save.append({
+                            "cliente": str(value["REINVENTOR"]),
+                            "error": "cliente ya existe",
+                        })
 
-                    Reinventor.objects.create(
-                        re_nameentity = value['REINVENTOR'],
-                        re_email = value['EMAIL'],
-                        re_namereinventor = value['NOMBRE'],
-                        re_address = value['DIRECCION'],
-                        pais = the_country[0],
-                        region = Region.objects.get(re_nombre=value['REGION']),
-                        comuna = Comuna.objects.get(com_nombre=value['COMUNA']),
-                        re_latitude = re_latitude,
-                        re_longitude = re_longitude
-                    ).save() 
-            
-        
-                            
+                    
             response = {
                 'message': 'success',
-                'error': False
+                'error': False,
+                'details': not_save
             }
             response_data = {'response': response}
             return JsonResponse(response_data)
