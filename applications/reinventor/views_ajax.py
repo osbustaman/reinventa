@@ -1,4 +1,5 @@
 import datetime
+import tempfile
 import io
 import json
 import base64
@@ -39,8 +40,74 @@ def new_observation(request):
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+
 @csrf_exempt
 def download_excel_for_upload_reinventor(request):
+    if request.method == 'POST':
+        try:
+            reinventores = ['REINVENTOR', 'NOMBRE', 'EMAIL', 'DIRECCION', 'REGION', 'COMUNA']
+            locations = ['NOMBRE COMUNA', 'REGION COMUNA']
+
+            df_reinventores = pd.DataFrame(columns=reinventores)
+            df_comunnes = pd.DataFrame(columns=locations)
+
+            # Crear archivo temporal
+            with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as tmpfile:
+                filename_excel = tmpfile.name
+
+                writer = pd.ExcelWriter(filename_excel, engine='xlsxwriter')
+
+                df_reinventores.to_excel(writer, sheet_name='reinventores', index=False)
+                df_comunnes.to_excel(writer, sheet_name='comunas', index=False)
+
+                df_reinventores.columns = reinventores
+                df_comunnes.columns = locations
+
+                writer.save()
+
+                workbook = openpyxl.load_workbook(filename=filename_excel)
+                sheet_cc = workbook['comunas']
+                sheet = workbook['reinventores']
+
+                object_comunas = Comuna.objects.all()
+                cont = 2
+                for comunas in object_comunas:
+                    sheet_cc[f'A{cont}'] = comunas.com_nombre
+                    sheet_cc[f'B{cont}'] = comunas.region.re_nombre
+                    cont += 1
+
+                object_region = Region.objects.all()
+                array_regiones = []
+                for region in object_region:
+                    array_regiones.append(region.re_nombre)
+
+                validation_regiones = DataValidation(type="list", formula1=f'"{",".join(array_regiones)}"')
+                validation_regiones.add(f'E2:E50')
+                sheet.add_data_validation(validation_regiones)
+
+                workbook.save(filename_excel)
+
+                # Codifica el archivo en base64
+                with open(filename_excel, 'rb') as file:
+                    excel_base64 = base64.b64encode(file.read()).decode('utf-8').replace('\n', '')
+
+            response = {
+                'message': excel_base64,
+                'error': False
+            }
+            response_data = {'response': response}
+            return JsonResponse(response_data)
+
+        except Exception as e:
+            return JsonResponse({'error': 'Error al descargar el archivo Excel: {}'.format(str(e))}, status=400)
+
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+@csrf_exempt
+def download_excel_for_upload_reinventor2(request):
     if request.method == 'POST':
         try:
 
