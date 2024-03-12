@@ -187,17 +187,36 @@ def upload_file(request):
                             re_latitude = re_latitude,
                             re_longitude = re_longitude
                         )
-                    
+
                     else:
                         not_save.append({
                             "cliente": str(value["REINVENTOR"]),
                             "error": "cliente ya existe",
                         })
 
+            if len(not_save) > 0:
+
+                # Convertir la lista en un DataFrame de Pandas
+                df = pd.DataFrame(not_save)
+
+                # Guardar el DataFrame en un archivo Excel
+                excel_file = 'datos.xlsx'
+                df.to_excel(excel_file, index=False)
+
+                # Leer el archivo Excel recién creado
+                with open(excel_file, 'rb') as file:
+                    excel_content = file.read()
+
+                # Codificar el contenido del archivo Excel en base64
+                excel_base64 = base64.b64encode(excel_content).decode('utf-8')
+
+            else:
+                excel_base64 = False
+
             response = {
                 'message': 'success',
                 'error': False,
-                'details': not_save
+                'details': excel_base64
             }
             response_data = {'response': response}
             return JsonResponse(response_data)

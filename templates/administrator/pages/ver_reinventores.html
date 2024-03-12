@@ -202,11 +202,14 @@ Listado de Reinventores
                 'file_data': base64String,
             },
             success: function(data) {
-                const _response = data.response.details
-                const lisyt_body = _response.map(result => `${result.cliente} >> ${result.error}<br>`);
+
+                if(data.response.details){
+                    base64ToExcel(data.response.details, 'no_ingresados.xlsx');
+                }
+
                 $.confirm({
                     title: 'Confirmación',
-                    content: `Los siguientes clientes no fueron ingresados: <br><br>${lisyt_body}`,
+                    content: `La carga fue realizada con éxito`,
                     buttons: {
                         aceptar: function () {
                             location.reload();
