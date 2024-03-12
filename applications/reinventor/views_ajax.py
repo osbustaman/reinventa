@@ -109,6 +109,120 @@ def download_excel_for_upload_reinventor(request):
 def upload_file(request):
     if request.method == 'POST':
         try:
+            not_save = []
+
+            # Obtén la cadena base64 del cuerpo del request
+            file_data = request.POST.get("file_data", "")
+
+            # Decodifica la cadena base64
+            decoded_data = base64.b64decode(file_data)
+
+            # Leer el archivo Excel
+            excel_file = io.BytesIO(decoded_data)
+            df_excel = pd.read_excel(excel_file, sheet_name=None)
+            hojas_excel = df_excel.keys()
+
+            datos_por_hoja = {}
+            for hoja in hojas_excel:
+                # Lee los datos de la hoja actual
+                # skiprows omite la primera fila
+                df_hoja = pd.read_excel(excel_file, sheet_name=hoja, skiprows=0)
+
+                # Guarda los datos de la hoja actual en un array
+                datos_hoja = []
+                for index, row in df_hoja.iterrows():
+                    datos_hoja.append(row.to_dict())
+
+                # Agrega los datos de la hoja actual al diccionario
+                datos_por_hoja[hoja] = datos_hoja
+            
+            the_country = Pais.objects.filter(pa_id=1)
+            if not the_country.exists():
+                raise Exception('El país no existe, debe crearlo primero')
+
+            for value in datos_por_hoja["reinventores"]:
+                if any(pd.isna(value[col]) for col in ['REINVENTOR', 'NOMBRE', 'DIRECCION', 'REGION', 'COMUNA', 'EMAIL']):
+                    not_save.append({
+                        "cliente": str(value["REINVENTOR"]),
+                        "nombre_a_cargo": str(value["NOMBRE"]),
+                        "direccion": str(value["DIRECCION"]),
+                        "region": str(value["REGION"]),
+                        "comuna": str(value["COMUNA"]),
+                        "email": str(value["EMAIL"]),
+                        "error": "faltan campos",
+                    })
+                else:
+                    object_reinventor = Reinventor.objects.filter(re_email=value['EMAIL']).exists()
+                    
+                    if not object_reinventor:
+                        address = f"{ value['DIRECCION'] }, { value['COMUNA'] }, { value['REGION'] }, { the_country[0].pa_nombre }"
+                        lat_lng = getLatitudeLongitude(address)
+
+                        if not lat_lng:
+                            re_latitude = 0
+                            re_longitude = 0
+                        else:
+                            re_latitude = lat_lng['latitude'] 
+                            re_longitude = lat_lng['longitude']
+
+                        Reinventor.objects.create(
+                            re_nameentity = value['REINVENTOR'],
+                            re_email = value['EMAIL'],
+                            re_namereinventor = value['NOMBRE'],
+                            re_address = value['DIRECCION'],
+                            pais = the_country[0],
+                            region = Region.objects.get(re_nombre=value['REGION']),
+                            comuna = Comuna.objects.get(com_nombre=value['COMUNA']),
+                            re_latitude = re_latitude,
+                            re_longitude = re_longitude
+                        ).save()
+
+                    else:
+                        not_save.append({
+                            "cliente": str(value["REINVENTOR"]),
+                            "error": "cliente ya existe",
+                        })
+
+            if len(not_save) > 0:
+                # Convertir la lista en un DataFrame de Pandas
+                df = pd.DataFrame(not_save)
+
+                # Crear archivo temporal para guardar los datos
+                with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as tmpfile:
+                    excel_file = tmpfile.name
+
+                    # Guardar el DataFrame en el archivo temporal
+                    df.to_excel(excel_file, index=False)
+
+                    # Leer el contenido del archivo temporal
+                    with open(excel_file, 'rb') as file:
+                        excel_content = file.read()
+
+                # Codificar el contenido del archivo Excel en base64
+                excel_base64 = base64.b64encode(excel_content).decode('utf-8')
+
+            else:
+                excel_base64 = False
+
+            response = {
+                'message': 'success',
+                'error': False,
+                'details': excel_base64
+            }
+            response_data = {'response': response}
+            return JsonResponse(response_data)
+        
+        except Exception as e:
+            return JsonResponse({'error': 'Error al procesar el archivo Excel: {}'.format(str(e))}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+@csrf_exempt  
+def upload_file2(request):
+    if request.method == 'POST':
+        try:
 
             not_save = []
 
@@ -192,25 +306,19 @@ def upload_file(request):
 
             if len(not_save) > 0:
 
-                # Crear archivo temporal
-                with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as tmpfile:
-                    filename_excel = tmpfile.name
+                # Convertir la lista en un DataFrame de Pandas
+                df = pd.DataFrame(not_save)
 
-                    writer = pd.ExcelWriter(filename_excel, engine='xlsxwriter')
+                # Guardar el DataFrame en un archivo Excel
+                excel_file = 'datos.xlsx'
+                df.to_excel(excel_file, index=False)
 
-                    # Convertir la lista en un DataFrame de Pandas
-                    df = pd.DataFrame(not_save)
+                # Leer el archivo Excel recién creado
+                with open(excel_file, 'rb') as file:
+                    excel_content = file.read()
 
-                    # Guardar el DataFrame en un archivo Excel
-                    excel_file = 'datos.xlsx'
-                    df.to_excel(excel_file, index=False)
-
-                    # Leer el archivo Excel recién creado
-                    with open(excel_file, 'rb') as file:
-                        excel_content = file.read()
-
-                    # Codificar el contenido del archivo Excel en base64
-                    excel_base64 = base64.b64encode(excel_content).decode('utf-8')
+                # Codificar el contenido del archivo Excel en base64
+                excel_base64 = base64.b64encode(excel_content).decode('utf-8')
 
             else:
                 excel_base64 = False
