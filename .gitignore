@@ -8,8 +8,8 @@ env
 *.pyc
 *.json
 *.pdf
-# *.png
-# *.jpg
+*.png
+*.jpg
 *.xlsx
 *.xlsb
 *.xls
