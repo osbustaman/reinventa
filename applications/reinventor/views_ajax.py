@@ -186,7 +186,7 @@ def upload_file(request):
                             comuna = Comuna.objects.get(com_nombre=value['COMUNA']),
                             re_latitude = re_latitude,
                             re_longitude = re_longitude
-                        )
+                        ).save()
 
                     else:
                         not_save.append({
