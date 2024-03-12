@@ -449,8 +449,11 @@ def deleteReinventor(request, re_id):
 
 @login_required
 def listRequestReinventor(request):
-    reinventor = Reinventor.objects.get(re_id=request.session['objectCompany']['re_id'])
-    objectsWithdrawalRequestReinventor = WithdrawalRequestReinventor.objects.filter(reinventor=reinventor)
+    try:
+        reinventor = Reinventor.objects.get(re_id=request.session['objectCompany']['re_id'])
+        objectsWithdrawalRequestReinventor = WithdrawalRequestReinventor.objects.filter(reinventor=reinventor)
+    except:
+        objectsWithdrawalRequestReinventor = []
     data = {
         'objects': objectsWithdrawalRequestReinventor,
     }
@@ -464,7 +467,6 @@ def addRequestReinventor(request):
         if form.is_valid():
 
             user_object = User.objects.get(id = request.session['id'])
-
 
             # Guardar los datos del formulario UserForm
             frm = form.save(commit=False)

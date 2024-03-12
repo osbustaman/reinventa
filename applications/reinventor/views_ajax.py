@@ -194,7 +194,6 @@ def upload_file(request):
                             "error": "cliente ya existe",
                         })
 
-                    
             response = {
                 'message': 'success',
                 'error': False,
