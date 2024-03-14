@@ -534,6 +534,11 @@ def editRequestReinventor(request, wrr_id):
         viewEstaterequest = False
 
     object = get_object_or_404(WithdrawalRequestReinventor, wrr_id=wrr_id)
+    wrr_estaterequest = request.POST.get('wrr_estaterequest', False)
+    if wrr_estaterequest:
+        object.wrr_estaterequest = int(wrr_estaterequest)
+        object.save()
+
     form = WithdrawalRequestReinventorForm(instance=object)
 
     objectsObservations = RequestTracking.objects.filter(withdrawalRequestReinventor=object)

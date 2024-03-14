@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 
 from django.urls import path
 
+from applications.reinventor.api.api import WithdrawalRequestUpdateAPIView
 from applications.reinventor.views_error import error404
 from . import views, views_ajax
 
@@ -48,6 +49,10 @@ urlpatterns = [
     path('ajax/nueva-observacion/', views_ajax.new_observation, name='new_observation'),
     path('ajax/upload-file/', views_ajax.upload_file, name='upload_file'),
     path('ajax/download-excel-for-upload-reinventor/', views_ajax.download_excel_for_upload_reinventor, name='download_excel_for_upload_reinventor'),
+
+
+    #api
+    path('api/actualizar-estado/', WithdrawalRequestUpdateAPIView.as_view(), name='actualizar_estado'),
 
 
     path('error404/', error404, name='error404'),

@@ -124,11 +124,9 @@
 
                                     <div class="item form-group">
                                         <div class="col-md-12 col-sm-12 offset-md-3">
-
-                                            {% if action == 'Crear' %}
+                                            {% if request.session.objectCompany.ur_typeuser == 1 %}
                                             <button type="submit" class="btn btn-success" form="form">{{ action }} Solicitud <i class="fa fa-floppy-o"></i></button>
                                             {% endif %}
-
                                             <button type="button" class="btn btn-info"
                                                     onclick="redirectToUrl('{{ linkBack }}')">Volver <i
                                                         class="fa fa-arrow-left"></i></button>
@@ -223,6 +221,8 @@
                             
                                 </div>
                             </div>
+
+                            {{ request.session.objectCompany.ur_typeuser }}
                             {% endif %}
                         </div>
                     </div>
@@ -236,6 +236,12 @@
 
     $(document).ready(function() {
         $('.select2-show-search').select2();
+
+        {% if action == 'Editar' %}
+        $("#id_wrr_date").attr("readonly", "readonly");
+        $("#id_wrr_quantityliters").attr("readonly", "readonly");
+        {% endif %}
+
     });
     const redirectToUrl = (url) => {
         location.href = url;
