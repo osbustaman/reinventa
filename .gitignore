@@ -4,6 +4,9 @@
 db.sqlite3
 .vscode/launch.json
 __pycache__
+
+staticfiles/
+
 env
 *.pyc
 *.json
