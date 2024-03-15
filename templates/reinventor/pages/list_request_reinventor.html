@@ -73,7 +73,9 @@ Listado de Solicitudes
                                 <td>{{ object.wrr_date }}</td>
                                 <td>{{ object.wrr_quantityliters }}</td>
                                 <td>{{ object.get_wrr_estaterequest_display }}</td>
-                                <td><button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-request-reinventor' object.wrr_id %}')">Ver Solicitud</button></td>
+                                <td>
+                                    <button type="button" class="btn btn-info btn-sm" onclick="redirectToUrl('{% url 'reinventa_app:edit-request-reinventor' object.wrr_id %}')">Ver Solicitud <i class="fa fa-eye"></i></button>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
