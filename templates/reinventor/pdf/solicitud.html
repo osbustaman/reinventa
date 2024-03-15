@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ejemplo de diseño para xhtml2pdf con tabla</title>
+    
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+        
+        .container {
+            font-family: Arial, sans-serif;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            border-collapse: collapse; /* Colapsamos los bordes de la tabla para una apariencia más limpia */
+        }
+
+        .handlee-regular {
+            font-family: "Handlee", cursive;
+            font-style: normal;
+            font-weight: bold;
+        }
+        
+        .box {
+            height: 100px; /* Altura de las celdas */
+        }
+        
+        .red {
+            background-color: red;
+        }
+        
+        .green {
+            background-color: green;
+        }
+        
+        .blue {
+            background-color: blue;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .td-img {
+            text-align: center; /* Centramos el contenido de la celda */
+            padding: 10px; /* Añadimos espacio interno a la celda */
+        }
+
+        img {
+            width: 300px; /* Establecemos un ancho máximo para la imagen */
+            height: auto; /* Permitimos que la altura se ajuste automáticamente */
+            z-index: -1; /* Hacemos que la imagen se superponga ligeramente a la tabla */
+        }
+    </style>
+</head>
+<body>
+    <table class="container" width="100%">
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                <strong>COMPROBANTE DE RETIRO DE <br>DESECHOS DE COCINA</strong>
+            </td>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: right; padding: 0px 50px 0px 0px; color: #E74C3C; font-style: normal; font-weight: bold;">
+                <strong>N° {{ wrr_id }}</strong>
+            </td>
+        </tr>
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 40px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                
+            </td>
+            <td class="handlee-regular" style="width: 50%; height: 40px; text-align: right; padding: 0px 50px 0px 0px; color: #E74C3C; font-style: normal; font-weight: bold;">
+                <strong>
+                    Razón Social: Reciclaje Reinventa Ltda. <br>
+                    Rut: 77.740.309-5 <br>
+                    Dirección: Santo Domingo, V Región <br>
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td class="td-img" colspan="2" style="text-align: center;">
+                <img src="https://reinventa-static.s3.amazonaws.com/logo_full.png" alt="Logo" style="position: relative; top: -80px;">
+            </td>
+        </tr>
+    </table>
+
+    <table class="container" width="100%">
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                Reciclador
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="container" width="100%">
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                Contacto
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="container" width="100%">
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                Dirección
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="container" width="100%">
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                Comuna
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="container" width="100%">
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                Fecha
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <table class="container" width="100%">
+        <tr>
+            <td class="handlee-regular" style="width: 50%; height: 80px; text-align: center; padding: 5px; color: #1A5A3F; font-style: normal; font-weight: bold;">
+                Cantidad de litros
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</body>
+</html>

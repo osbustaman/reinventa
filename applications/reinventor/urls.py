@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 
 from django.urls import path
 
-from applications.reinventor.api.api import WithdrawalRequestUpdateAPIView
+from applications.reinventor.api.api import WithdrawalRequestUpdateAPIView, generatePdfAPIView
 from applications.reinventor.views_error import error404
 from . import views, views_ajax
 
@@ -53,6 +53,7 @@ urlpatterns = [
 
     #api
     path('api/actualizar-estado/', WithdrawalRequestUpdateAPIView.as_view(), name='actualizar_estado'),
+    path('api/generar-pdf/', generatePdfAPIView.as_view(), name='generar_pdf'),
 
 
     path('error404/', error404, name='error404'),
