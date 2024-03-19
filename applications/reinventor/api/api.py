@@ -25,12 +25,10 @@ from reinventa.settings.base import BASE_DIR
 @permission_classes([AllowAny])
 class generatePdfAPIView(generics.GenericAPIView):
 
-    
-
     def post(self, request, *args, **kwargs):
 
         wrr_id = request.data['wrr_id']
-        type_pdf = request.data['type_pdf']
+        # type_pdf = request.data['type_pdf']
 
         html_template = get_template('reinventor/pdf/solicitud.html')
 
@@ -48,7 +46,13 @@ class generatePdfAPIView(generics.GenericAPIView):
         context = {
             'base_dir': BASE_DIR,
             "wrr_id": object_request.wrr_id,
-            "co_name": object_company.co_name
+            "co_name": object_company.co_name,
+            "reciclador": object_request.reinventor.re_nameentity,
+            "contacto": object_request.reinventor.re_namereinventor,
+            "direccion": object_request.reinventor.re_address,
+            "comuna": object_request.reinventor.comuna.com_nombre.title(),
+            "fecha": object_request.wrr_date,
+            "litros": object_request.wrr_quantityliters
         }
 
         # Renderizar el HTML con el contexto
