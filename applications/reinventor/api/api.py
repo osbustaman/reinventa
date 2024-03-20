@@ -25,8 +25,6 @@ from reinventa.settings.base import BASE_DIR
 @permission_classes([AllowAny])
 class generatePdfAPIView(generics.GenericAPIView):
 
-    
-
     def post(self, request, *args, **kwargs):
 
         wrr_id = request.data['wrr_id']
@@ -37,12 +35,12 @@ class generatePdfAPIView(generics.GenericAPIView):
         try:
             object_request = WithdrawalRequestReinventor.objects.get(wrr_id=wrr_id)
         except WithdrawalRequestReinventor.DoesNotExist:
-            Response({"error": "No se encontró la solicitud de retiro correspondiente al ID proporcionado."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "No se encontró la solicitud de retiro correspondiente al ID proporcionado."}, status=status.HTTP_404_NOT_FOUND)
 
         try:
             object_company = Company.objects.all().last()
         except WithdrawalRequestReinventor.DoesNotExist:
-            Response({"error": "No se encuentra configurada la empresa en el sistema"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "No se encuentra configurada la empresa en el sistema"}, status=status.HTTP_404_NOT_FOUND)
 
         # Crear un contexto para el HTML
         context = {

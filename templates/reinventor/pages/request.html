@@ -124,7 +124,7 @@
 
                                     <div class="item form-group">
                                         <div class="col-md-12 col-sm-12 offset-md-3">
-                                            {% if request.session.objectCompany.ur_typeuser == 1 %}
+                                            {% if request.session.objectCompany.ur_typeuser == 1 or action == "Crear"%}
                                             <button type="submit" class="btn btn-success" form="form">{{ action }} Solicitud <i class="fa fa-floppy-o"></i></button>
                                             {% endif %}
                                             <button type="button" class="btn btn-info"
@@ -221,8 +221,6 @@
                             
                                 </div>
                             </div>
-
-                            {{ request.session.objectCompany.ur_typeuser }}
                             {% endif %}
                         </div>
                     </div>
