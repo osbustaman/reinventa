@@ -53,6 +53,7 @@ urlpatterns = [
 
     path('', include('applications.account.urls')),
     path('', include('applications.reinventor.urls')),
+    path('', include('applications.web.urls')),
 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
