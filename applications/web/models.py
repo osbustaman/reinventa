@@ -15,7 +15,7 @@ class Banner(TimeStampedModel):
     ba_title = models.CharField("Bajada de título", max_length=255)
     ba_download_title = models.CharField("Bajada de título", max_length=255)
     ba_logo = models.ImageField("Imagen banner", help_text=" Formatos .jpg|.png|.gif|.jpeg", upload_to='image/logo/', null=True, blank=True)
-    ba_element_order = models.IntegerField("Estado de la solicitud", null=True, blank=True)
+    ba_element_order = models.IntegerField("Orden", null=True, blank=True)
     ba_active = models.CharField("Activo", choices=OPTIONS, max_length=1, default="Y")
 
     def __int__(self):
@@ -40,10 +40,18 @@ class SocialMediaNews(TimeStampedModel):
         ('N', 'NO'),
     )
 
+    SOCIAL_NETWORKS = (
+        ('F', 'Facebook'),
+        ('I', 'Instagram'),
+        ('TT', 'Tik Tok'),
+    )
+
     smn_id = models.AutoField("Key", primary_key=True)
     smn_name = models.CharField("nombre noticia ", max_length=255)
-    smn_link = models.CharField("link ", max_length=255)
+    smn_link = models.TextField("link script")
     smn_image = models.ImageField("Imagen banner", help_text="Formatos .jpg|.png|.gif|.jpeg, es opcional", upload_to='image/logo/', null=True, blank=True)
+    smn_social_network = models.CharField("Tipo red social", choices=SOCIAL_NETWORKS, max_length=2, null=True, blank=True)
+    sm_element_order = models.IntegerField("Orden", null=True, blank=True)
     smn_active = models.CharField("Activo", choices=OPTIONS, max_length=1, default="Y")
 
     def __int__(self):
