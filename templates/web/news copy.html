@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Handlee&family=Shadows+Into+Light&display=swap');
+
+        @import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Handlee&family=Permanent+Marker&family=Shadows+Into+Light&display=swap');
+
+        .gochi-hand-regular-titulo {
+            font-family: "Gochi Hand", cursive;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .permanent-marker-regular-titulo {
+            font-family: "Permanent Marker", cursive;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+
+
+        body {
+            background-image: url('https://reinventa-static.s3.amazonaws.com/login_fondo.png'); /* Reemplaza esta URL con la URL de tu imagen */
+            background-size: cover; /* Para cubrir toda el área del body */
+            background-repeat: repeat; /* Para que la imagen se repita */
+            background-color: rgba(255, 255, 255, 0.137); /* Color de fondo transparente */
+        }
+
+        /* Estilo personalizado para el área de ingresar */
+        .ingresar {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #9BC65B;
+            color: #ffffff;
+        }
+        
+        /* Estilo para la imagen del logo */
+        #logo, .social-block img {
+            transition: transform 0.3s;
+            max-height: 70px; /* ajusta la altura según sea necesario */
+        }
+        
+        /* Estilo para el carrusel */
+        #carouselExampleIndicators .carousel-item img {
+            height: 500px; /* ajusta la altura del carrusel según sea necesario */
+        }
+
+        /* Estilo para los bloques de redes sociales */
+        .social-block {
+            margin-top: 20px;
+            text-align: center;
+            height: 250px; /* ajusta la altura del bloque según sea necesario */
+            overflow: hidden; /* para ocultar cualquier contenido adicional */
+        }
+
+        .social-block img {
+            max-height: 70px;
+            margin: auto;
+            width: 100%; /* para asegurarse de que las imágenes no se desborden */
+            text-decoration: none; /* quita la línea de subrayado */
+            color: #ffffff; /* color del icono */
+        }
+
+        /* Estilo para el footer */
+        .footer {
+            background-color: #1A5A3F; /* color de fondo */
+            color: #ffffff; /* color del texto */
+            padding: 20px 0;
+            width: 100%; /* Ancho igual al del navbar */
+            text-align: left; /* alinea el texto a la izquierda */
+            margin-top: 20px;
+        }
+
+        /* Estilo para los iconos de redes sociales */
+        .social-icons {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Estilo para el campo de entrada de suscripción */
+        .subscribe-input {
+            margin-bottom: 10px;
+        }
+
+        .color-blanco{
+            color: #ffffff;
+        }
+        
+        
+        .no-overline:hover{
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .color-verde{
+            background-color: #1A5A3F !important;
+        }
+
+        .font-25{
+            font-size: 25px;
+        }
+
+        .font-70{
+            color: #3b3b3b;
+            font-size: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Área de ingresar -->
+        <div class="text-right gochi-hand-regular-titulo" style="color: #3b3b3b;">
+            <small>Dirección: Central 44, Santo Domingo, Región de Valparaíso</small>
+            <small>Teléfono: +56 9 3238 1255</small>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light color-verde">
+        
+        <div class="container">
+            <!-- Logo y nombre de la página -->
+            <a class="navbar-brand" href="#">
+                <img id="logo" src="https://reinventa-static.s3.amazonaws.com/logo_full.png" alt="Bienvenidos a Noticias de Reinventa">
+            </a>
+
+            <!-- Menú de navegación -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link color-blanco" href="#"><span class="font-25 gochi-hand-regular-titulo color-blanco">Opción 1</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-blanco" href="#"><span class="font-25 gochi-hand-regular-titulo color-blanco">Opción 2</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link color-blanco" href="#"><span class="font-25 gochi-hand-regular-titulo color-blanco">Opción 3</span></a>
+                    </li>-->
+                </ul> 
+
+                <div class="ingresar">
+                    <a href="https://administrador.reciclareinventa.cl/inicia-sesion/" target="_blank" class="color-blanco no-overline permanent-marker-regular-titulo">Usuario Reinventa, ingresar aquí</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido de la página -->
+    <div class="container">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for value in list_object_banner %}
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" {% if forloop.first %}class="active"{% endif %}></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for value in list_object_banner %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="media/{{ value.ba_logo }}" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ value.ba_title }}</h5>
+                        <p>{{ value.ba_download_title }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        
+        <!-- Bloques de redes sociales -->
+        <div class="row mt-3">
+
+            {% for value in list_social_media_news %}
+            <div class="col-md-4">
+                <div class="social-block">
+                    {{ value.smn_link|safe }}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- PDF -->
+            <div class="pdf-container col-md-12">
+                <h1 class="text-center gochi-hand-regular-titulo font-70">Calendario Ambiental</h1>
+                <embed src="https://reinventa-static.s3.amazonaws.com/Calendario_Ambiental_2024.pdf" type="application/pdf" width="100%" height="600px" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/reciclajereinventa" target="_blank" class="color-blanco no-overline gochi-hand-regular-titulo color-blanco"><i class="fab fa-facebook-square"></i> <small>Facebook</small></a>
+                    </div>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/reinventa._/" target="_blank" class="color-blanco no-overline gochi-hand-regular-titulo color-blanco"><i class="fab fa-instagram-square"></i> <small>Instagram</small></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <!-- <ul class="list-unstyled">
+                        <li>
+                            <a href="#" class="color-blanco no-overline gochi-hand-regular-titulo color-blanco">Opción 1</a>
+                        </li>
+                        <li>
+                            <a href="#" class="color-blanco no-overline gochi-hand-regular-titulo color-blanco">Opción 2</a>
+                        </li>
+                        <li>
+                            <a href="#" class="color-blanco no-overline gochi-hand-regular-titulo color-blanco">Opción 3</a>
+                        </li>
+                    </ul> -->
+                </div>
+                <div class="col-md-4">
+                    <form>
+                        <div class="form-group subscribe-input">
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Inscríbete a noticias aquí">
+                        </div>
+                        <button type="submit" class="btn btn-primary gochi-hand-regular-titulo color-blanco">Suscribirse</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <small>© 2021 Noticias de Reinventa. Todos los derechos reservados.</small>
+                </div>
+            </div>   
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS (opcional, solo si necesitas componentes interactivos) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#logo, .social-block img").hover(function() {
+                $(this).css("transform", "scale(1.05)");
+            }, function() {
+                $(this).css("transform", "scale(1)");
+            });
+        });
+    </script>
+</body>
+
+</html>
