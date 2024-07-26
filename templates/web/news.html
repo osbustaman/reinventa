@@ -171,12 +171,10 @@
             <!-- end about -->
 
         {% elif block.bh_type_block == 2 %}
-            
             <!-- for_box -->
             <div class="for_box_bg">
                 <div class="container">
                     <div class="row">
-                        
                         {% for pg_1 in list_element_block_2 %}
                         <div class="col-xl-3 col-lg-3 col-md-3 co-sm-l2">
                             <div class="for_box">
@@ -186,12 +184,10 @@
                             </div>
                         </div>
                         {% endfor %}
-
                     </div>
                 </div>
             </div>
             <!-- end for_box -->
-
         {% elif block.bh_type_block == 3 %}
 
         <div id="{{block.get_bh_type_block_display}}" class="offer">
@@ -208,14 +204,12 @@
                 <div class="container">
                     <div class="row">
 
-
                         {% for pg_3 in list_element_block_3 %}
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 ">
                             <div class="offer_box">
                                 <h3>{{pg_3.plu_elementname}}</h3>
                                 <figure><img src="media/{{ pg_3.plu_image }}" alt="{{pg_3.plu_elementname}}" /></figure>
                                 <p>{{pg_3.plu_text}}</p>
-    
                             </div>
                         </div>
                         {% endfor %}
@@ -229,10 +223,114 @@
         </div>
 
         {% elif block.bh_type_block == 4 %}
-
+        <div id="{{block.get_bh_type_block_display}}" class="clients mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="title">
+                            <h2>{{block.bh_name|safe}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clients_red">
+            <div class="container">
+                <div id="testimonial_slider" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ul class="carousel-indicators">
+                        {% for testimony in list_testimonials %}
+                        <li data-target="#testimonial_slider" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></li>
+                        {% endfor %}
+                    </ul>
+                    <!-- The slideshow -->
+                    <div class="carousel-inner">
+                        {% for testimony in list_testimonials %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+    
+                            <div class="testomonial_section">
+                                <div class="full center">
+                                </div>
+                                <div class="full testimonial_cont text_align_center cross_layout">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pa_right">
+                                            <div class="testomonial_img">
+                                                <i><img src="media/{{ testimony.tm_image }}" alt="#"/></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 pa_left">
+                                            <div class="cross_inner">
+                                                <h3>{{ testimony.tm_nameperson }}<br><strong class="ornage_color">{{ testimony.tm_positionperson }}</strong></h3>
+                                                <p>
+                                                    <img src="{% statics_tag 'web/icon/1.png' %}" alt="#" />
+                                                    {{ testimony.tm_testimony }}
+                                                    <img src="{% statics_tag 'web/icon/2.png' %}" alt="#" />
+                                                </p>
+    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                        </div>
+                        {% endfor %}    
+                    </div>
+    
+                </div>
+            </div>
+        </div>
         {% endif %}
 
     {% endfor %}
+
+    <div id="contact" class="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title">
+                        <h2>Get In <strong class="black"> Toucgh</strong></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid padddd">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 padddd">
+            <div class="map_section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+
+                            <form class="main_form">
+                                <div class="row">
+
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <input class="form-control" placeholder="Name" type="text" name="Name">
+                                    </div>
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <input class="form-control" placeholder="Email" type="text" name="Email">
+                                    </div>
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <input class="form-control" placeholder="Phone" type="text" name="Phone">
+                                    </div>
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <textarea class="textarea" placeholder="Message" type="text" name="Message"></textarea>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                        <button class="send">Send</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="map">
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     
     <!--  footer -->

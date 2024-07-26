@@ -343,7 +343,7 @@ class Plugins(TimeStampedModel):
     plu_link = models.TextField("link del elemento", null=True, blank=True)
     plu_order = models.IntegerField("Posición del plugin", null=True, blank=True)
     plu_image = models.ImageField(
-        "subir imagen", help_text="Formatos .jpg|.png|.gif|.jpeg", upload_to='company_images/', null=True, blank=True)
+        "subir imagen", help_text="Formatos .jpg|.png|.gif|.jpeg", upload_to='image/', null=True, blank=True)
     plu_active = models.TextField("plugin activo", choices=OPTIONS, default=1)
 
     def __int__(self):
@@ -359,3 +359,34 @@ class Plugins(TimeStampedModel):
         db_table = 'web_plugins'
         ordering = ['plu_id']
         verbose_name_plural = 'Plugins'
+
+
+class Testimonials(TimeStampedModel):
+
+    OPTIONS = (
+        ('Y', 'SI'),
+        ('N', 'NO'),
+    )
+
+    tm_id = models.AutoField("Key", primary_key=True)
+    tm_nameperson = models.CharField("Nombre Persona", max_length=100)
+    tm_positionperson = models.CharField("Cargo Persona", max_length=100)
+    tm_testimony = models.TextField("Testimonio")
+    tm_image = models.ImageField(
+        "subir imagen", help_text="Formatos .jpg|.png|.gif|.jpeg", upload_to='image/')
+    tm_active = models.TextField("persona activa", choices=OPTIONS, default="Y")
+
+    def __int__(self):
+        return self.tm_id
+
+    def __str__(self) -> str:
+        return self.tm_nameperson
+    username = property(__str__)
+
+    def save(self, *args, **kwargs):
+        super(Testimonials, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'web_testimonials'
+        ordering = ['tm_id']
+        verbose_name_plural = 'Testimonios'

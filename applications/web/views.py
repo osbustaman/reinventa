@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from applications.web.models import Banner, BlockHome, Header, ListItems, Plugins, SocialMediaNews
+from applications.web.models import Banner, BlockHome, Header, ListItems, Plugins, SocialMediaNews, Testimonials
 
 # Create your views here.
 def news(request):
@@ -20,6 +20,7 @@ def news(request):
         list_element_block_2 = Plugins.objects.filter(blockHome__bh_type_block=2, plu_active='Y').order_by('plu_order')
         list_element_block_3 = Plugins.objects.filter(blockHome__bh_type_block=3, plu_active='Y').order_by('plu_order')
 
+        list_testimonials = Testimonials.objects.filter(tm_active='Y')
 
         data = {
             "list_object_banner": list_object_banner,
@@ -29,6 +30,7 @@ def news(request):
             "list_block_home": list_block_home,
             "list_element_block_2": list_element_block_2,
             "list_element_block_3": list_element_block_3,
+            "list_testimonials": list_testimonials
         }
         return render(request, 'web/news.html', data)
     
