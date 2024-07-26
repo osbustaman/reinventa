@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from applications.web.models import Banner, BlockHome, Plugins, RequestWeb, Services, SocialMediaNews, ListItems, Header, Image, SocialNetwork, Testimonials
+from applications.web.models import Applications, Banner, BlockHome, Plugins, RequestWeb, Services, SocialMediaNews, ListItems, Header, Image, SocialNetwork, Testimonials
 
 # Register your models here.
 
@@ -49,6 +49,10 @@ class TestimonialsAdmin(admin.ModelAdmin):
     list_display = ('tm_id', 'tm_nameperson', 'tm_positionperson', 'tm_image', 'tm_active')
     list_per_page = 10
 
+class ApplicationsAdmin(admin.ModelAdmin):
+    list_display = ('app_id', 'app_name', 'app_mail', 'app_phone', 'app_message')
+    list_per_page = 10
+
 admin.site.register(Banner)
 admin.site.register(SocialMediaNews)
 admin.site.register(ListItems, ListItemsAdmin)
@@ -60,3 +64,4 @@ admin.site.register(Services, ServicesAdmin)
 admin.site.register(BlockHome, BlockHomeAdmin)
 admin.site.register(Plugins, PluginsAdmin)
 admin.site.register(Testimonials, TestimonialsAdmin)
+admin.site.register(Applications, ApplicationsAdmin)

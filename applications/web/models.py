@@ -322,7 +322,6 @@ class ListItems(TimeStampedModel):
         db_table = "web_items"
         ordering = ['li_id']
 
-    
 class Plugins(TimeStampedModel):
 
     OPTIONS = (
@@ -360,7 +359,6 @@ class Plugins(TimeStampedModel):
         ordering = ['plu_id']
         verbose_name_plural = 'Plugins'
 
-
 class Testimonials(TimeStampedModel):
 
     OPTIONS = (
@@ -390,3 +388,25 @@ class Testimonials(TimeStampedModel):
         db_table = 'web_testimonials'
         ordering = ['tm_id']
         verbose_name_plural = 'Testimonios'
+
+class Applications(TimeStampedModel):
+
+    app_id = models.AutoField("Key", primary_key=True)
+    app_name = models.CharField("Nombre Persona", max_length=100, null=True, blank=True)
+    app_mail = models.EmailField("Correo Persona", max_length=100, null=True, blank=True)
+    app_phone = models.CharField("Teléfono Persona", max_length=100, null=True, blank=True)
+    app_message = models.TextField("Mensaje", null=True, blank=True, default="suscripción")
+
+    def __int__(self):
+        return self.app_id
+
+    def __str__(self):
+        return self.app_name if self.app_name else ''
+    
+    def save(self, *args, **kwargs):
+        super(Applications, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'web_applications'
+        ordering = ['app_id']
+        verbose_name_plural = 'Solicitudes de personas'

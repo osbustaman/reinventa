@@ -1,6 +1,11 @@
+import json
+
 from django.shortcuts import render
 
-from applications.web.models import Banner, BlockHome, Header, ListItems, Plugins, SocialMediaNews, Testimonials
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+from applications.web.models import Applications, Banner, BlockHome, Header, ListItems, Plugins, SocialMediaNews, Testimonials
 
 # Create your views here.
 def news(request):
@@ -36,3 +41,50 @@ def news(request):
     
     else:
         return render(request, 'web/page_in_construction.html')
+    
+
+@csrf_exempt  
+def ajax_send_message(request):
+    if request.method == 'POST':
+        try:
+
+            app = Applications()
+            app.app_name = request.POST['name']
+            app.app_mail = request.POST['email']
+            app.app_phone = request.POST['phone']
+            app.app_message = request.POST['message']
+            app.save()
+
+            response = {
+                'message': 'success',
+                'error': False
+            }
+            response_data = {'response': response}
+            return JsonResponse(response_data)
+        
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Error al decodificar JSON: {}'.format(str(e))}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+
+@csrf_exempt  
+def ajax_to_subscribe(request):
+    if request.method == 'POST':
+        try:
+
+            app = Applications()
+            app.app_mail = request.POST['email']
+            app.save()
+
+            response = {
+                'message': 'success',
+                'error': False
+            }
+            response_data = {'response': response}
+            return JsonResponse(response_data)
+        
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Error al decodificar JSON: {}'.format(str(e))}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
