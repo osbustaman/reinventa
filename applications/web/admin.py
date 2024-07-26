@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from applications.web.models import Banner, BlockHome, RequestWeb, Services, SocialMediaNews, ListItems, Header, Image, SocialNetwork
+from applications.web.models import Banner, BlockHome, Plugins, RequestWeb, Services, SocialMediaNews, ListItems, Header, Image, SocialNetwork
 
 # Register your models here.
 
@@ -41,6 +41,11 @@ class BlockHomeAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+class PluginsAdmin(admin.ModelAdmin):
+    list_display = ('plu_id', 'blockHome', 'plu_elementname', 'plu_title', 'plu_linkactive', 'plu_active')
+    list_per_page = 10
+
+
 admin.site.register(Banner)
 admin.site.register(SocialMediaNews)
 admin.site.register(ListItems, ListItemsAdmin)
@@ -50,3 +55,4 @@ admin.site.register(SocialNetwork, SocialNetworkAdmin)
 admin.site.register(RequestWeb, RequestWebAdmin)
 admin.site.register(Services, ServicesAdmin)
 admin.site.register(BlockHome, BlockHomeAdmin)
+admin.site.register(Plugins, PluginsAdmin)

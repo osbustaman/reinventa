@@ -321,3 +321,41 @@ class ListItems(TimeStampedModel):
         verbose_name_plural = "Listado de Items"
         db_table = "web_items"
         ordering = ['li_id']
+
+    
+class Plugins(TimeStampedModel):
+
+    OPTIONS = (
+        ('Y', 'SI'),
+        ('N', 'NO'),
+    )
+
+    plu_id = models.AutoField("Key", primary_key=True)
+    blockHome = models.ForeignKey(BlockHome, verbose_name="BlockHome",
+                                on_delete=models.PROTECT, db_column="plu_block_home", null=True, blank=True)
+    plu_elementname = models.CharField("nombre del elemento", max_length=100)
+    plu_icon = models.CharField(
+        "icono del elemento", max_length=100, null=True, blank=True)
+    plu_title = models.CharField(
+        "título del elemento", max_length=100, null=True, blank=True)
+    plu_text = models.TextField("texto", null=True, blank=True)
+    plu_linkactive = models.TextField("link activo", choices=OPTIONS, default=1)
+    plu_link = models.TextField("link del elemento", null=True, blank=True)
+    plu_order = models.IntegerField("Posición del plugin", null=True, blank=True)
+    plu_image = models.ImageField(
+        "subir imagen", help_text="Formatos .jpg|.png|.gif|.jpeg", upload_to='company_images/', null=True, blank=True)
+    plu_active = models.TextField("plugin activo", choices=OPTIONS, default=1)
+
+    def __int__(self):
+        return self.plu_id
+
+    def __str__(self) -> str:
+        return self.plu_elementname
+
+    def save(self, *args, **kwargs):
+        super(Plugins, self).save(*args, **kwargs)
+
+    class Meta:
+        db_table = 'web_plugins'
+        ordering = ['plu_id']
+        verbose_name_plural = 'Plugins'

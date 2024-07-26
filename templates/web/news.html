@@ -146,27 +146,91 @@
 
     {% for block in list_block_home %}
 
-    <!-- about -->
-    <div id="about" class="about">
-        <div class="container">
-            <div class="row">
+        {% if block.bh_type_block == 1 %}
 
-                <div class="col-xl-5 col-lg-5 col-md-5 co-sm-l2">
-                    <div class="about_box">
-                        <h2>{{block.bh_name}}<br><strong class="black"> </strong></h2>
-                        <p>{{ block.bh_html|safe }}</p>
-                        <!-- <a href="#"></a> -->
+            <!-- about -->
+            <div id="{{block.get_bh_type_block_display}}" class="about">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-xl-5 col-lg-5 col-md-5 co-sm-l2">
+                            <div class="about_box">
+                                <h2>{{block.bh_name}}<br><strong class="black"> </strong></h2>
+                                <p>{{ block.bh_html|safe }}</p>
+                                <!-- <a href="#"></a> -->
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-lg-7 col-md-7 co-sm-l2">
+                            <div class="about_img">
+                                <figure><img src="media/{{ block.image.img_image }}" alt="img" /></figure>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xl-7 col-lg-7 col-md-7 co-sm-l2">
-                    <div class="about_img">
-                        <figure><img src="media/{{ block.image.img_image }}" alt="img" /></figure>
+            </div>
+            <!-- end about -->
+
+        {% elif block.bh_type_block == 2 %}
+            
+            <!-- for_box -->
+            <div class="for_box_bg">
+                <div class="container">
+                    <div class="row">
+                        
+                        {% for pg_1 in list_element_block_2 %}
+                        <div class="col-xl-3 col-lg-3 col-md-3 co-sm-l2">
+                            <div class="for_box">
+                                <i><img src="media/{{ pg_1.plu_image }}" alt="{{pg_1.plu_text}}"/></i>
+                                <span>{{pg_1.plu_text}}</span>
+                                <h3>{{pg_1.plu_elementname}}</h3>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+            <!-- end for_box -->
+
+        {% elif block.bh_type_block == 3 %}
+
+        <div id="{{block.get_bh_type_block_display}}" class="offer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="title">
+                            <h2>{{block.bh_name|safe}}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="offer-bg">
+                <div class="container">
+                    <div class="row">
+
+
+                        {% for pg_3 in list_element_block_3 %}
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 ">
+                            <div class="offer_box">
+                                <h3>{{pg_3.plu_elementname}}</h3>
+                                <figure><img src="media/{{ pg_3.plu_image }}" alt="{{pg_3.plu_elementname}}" /></figure>
+                                <p>{{pg_3.plu_text}}</p>
+    
+                            </div>
+                        </div>
+                        {% endfor %}
+    
+                        <!-- <div class="col-md-12">
+                            <a class="read-more">See More</a>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- end about -->
+
+        {% elif block.bh_type_block == 4 %}
+
+        {% endif %}
 
     {% endfor %}
 
@@ -187,11 +251,9 @@
                         <div class="address">
                             <h3>Quick links</h3>
                             <ul class="Links_footer">
-                                <li><img src="icon/3.png" alt="#" /> <a href="#"> Join Us</a> </li>
-                                <li><img src="icon/3.png" alt="#" /> <a href="#">Maintenance</a> </li>
-                                <li><img src="icon/3.png" alt="#" /> <a href="#">Language Packs</a> </li>
-                                <li><img src="icon/3.png" alt="#" /> <a href="#">LearnPress</a> </li>
-                                <li><img src="icon/3.png" alt="#" /> <a href="#">Release Status</a> </li>
+                                {% for item in list_items %}
+                                <li><img src="{% statics_tag 'web/icon/3.png' %}" alt="#" /> <a href="#{{item.li_link}}">{{item.li_name|title}}</a> </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
