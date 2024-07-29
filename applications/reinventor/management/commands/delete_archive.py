@@ -9,7 +9,8 @@ class Command(BaseCommand):
 
         list_directories = [
             'applications/account/migrations/',
-            'applications/reinventor/migrations/'
+            'applications/reinventor/migrations/',
+            'applications/web/migrations/'
         ]
 
         for dir in list_directories:
