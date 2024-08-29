@@ -265,12 +265,18 @@ class Header(TimeStampedModel):
     )
 
     he_id = models.AutoField("Key", primary_key=True)
+    he_title = models.CharField("Título Header", max_length=255, default="Reinventa")
     he_logo = models.ImageField(
         "Logo Header", help_text=" Formatos .jpg|.png|.gif|.jpeg", upload_to='image/')
     he_address = models.CharField("Dirección", max_length=255)
     he_email = models.EmailField("Correo", max_length=255)
     he_phone = models.CharField("Teléfono", max_length=255)
     he_search = models.CharField("Tiene buscador?", max_length=1, choices=ACTIVE, default="Y")
+
+    he_text_footer = models.TextField("Texto footer", null=True, blank=True)
+    he_text_footer_sucrb = models.TextField("Texto footer suscripción", null=True, blank=True)
+
+
     he_active = models.CharField("Activo", max_length=1, choices=ACTIVE, default="Y")
 
     def __int__(self):
@@ -410,3 +416,4 @@ class Applications(TimeStampedModel):
         db_table = 'web_applications'
         ordering = ['app_id']
         verbose_name_plural = 'Solicitudes de personas'
+
